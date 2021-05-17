@@ -1,14 +1,14 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from flask import render_template
 from flask import request, redirect, url_for
-
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:B17s"fric"@localhost/UZ'
-app.config['SQLALCHEMY_BINDS'] = { 'NUST' : 'postgresql://postgres:B17s"fric"@localhost/nust',
-                                    'MSU' : 'postgresql://postgres:B17s"fric"@localhost/msu'}
+app.config['SQLALCHEMY_BINDS'] = {'NUST': 'postgresql://postgres:B17s"fric"@localhost/nust',
+                                  'MSU': 'postgresql://postgres:B17s"fric"@localhost/msu'}
 db = SQLAlchemy(app)
+
 
 class Students(db.Model):
     RegNum = db.Column(db.Integer, primary_key=True)
@@ -24,9 +24,9 @@ class Students(db.Model):
         self.Name = Name
         self.Surname = Surname
 
-
     def __repr__(self):
-        return '<Name %r' %self.Name
+        return '<Name %r' % self.Name
+
 
 class Students(db.Model):
     __bind_key__ = 'MSU'
@@ -39,14 +39,12 @@ class Students(db.Model):
     email = db.Column(db.String(120), unique=True)
     GraduationYear = db.Column(db.String(120), unique=True)
 
-
     def __init__(self, Name, Surname):
         self.Name = Name
         self.Surname = Surname
 
-
     def __repr__(self):
-        return '<Name %r' %self.Name
+        return '<Name %r' % self.Name
 
 
 class Students(db.Model):
@@ -64,24 +62,26 @@ class Students(db.Model):
         self.Name = Name
         self.Surname = Surname
 
-
     def __repr__(self):
-        return '<Name %r' %self.Name
+        return '<Name %r' % self.Name
+
 
 @app.route('/detail-list/')
 def details():
     myStudent = Students.query.all()
     return render_template('student_details_list.html', myStudent=myStudent)
 
-@app.route('/details-capture/', methods = ['POST'])
+
+@app.route('/details-capture/', methods=['POST'])
 def capture():
     student = Students(request.form['RegNum'], request.form['Name'],
-    request.form['Surname'], request.form['Programme'],
-    request.form['DOB'], request.form['Address'], request.form['email'],
-    request.form['GraduationYear'])
+                       request.form['Surname'], request.form['Programme'],
+                       request.form['DOB'], request.form['Address'], request.form['email'],
+                       request.form['GraduationYear'])
     db.session.add(student)
     db.session.commit()
     return redirect(url_for("details"))
+
 
 if __name__ == "__main__":
     app.run(debug=True)
