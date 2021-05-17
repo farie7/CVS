@@ -13,6 +13,7 @@ Base = declarative_base()
 
 app = Flask(__name__)
 
+
 # DATABASES = {
 #     'hit': 'postgresql://postgres:postgres@localhost/university_of_zimbabwe',
 #     'cut': 'postgresql://postgres:postgres@localhost/chinhoyi_institute',
@@ -248,7 +249,8 @@ def seed_databases():
         for session in [session1, session2, session3]:
             session.close()
 
-for e in [engine_cut,engine_uz,engine_hit]:
+
+for e in [engine_cut, engine_uz, engine_hit]:
     Base.metadata.drop_all(bind=e)
 for e in [engine_cut, engine_uz, engine_hit]:
     Base.metadata.create_all(bind=e)
