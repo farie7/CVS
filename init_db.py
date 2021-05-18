@@ -2,9 +2,8 @@ import argparse
 import os
 import sqlite3
 
-from reportlab.lib.pagesizes import LETTER
-from reportlab.lib.units import inch
-from reportlab.pdfgen.canvas import Canvas
+import pdfkit
+from flask import Flask
 
 parser = argparse.ArgumentParser(prog="init_db", usage="%(prog)s  [options]")
 parser.add_argument("-i", "--init", help='Initialize database')
@@ -12,6 +11,8 @@ parser.add_argument("-d", "--database", help='Enter university database.')
 parser.add_argument("-r", "--reg_number", help='Enter student reg number. ')
 
 args = parser.parse_args()
+
+app = Flask(__name__)
 
 
 def initialise_db():
@@ -84,15 +85,11 @@ def query_student(database: str, reg_number: str):
 
 
 def print_certificate(student):
-    canvas = Canvas("hello.pdf", pagesize=LETTER)
-    canvas.setTitle("Certificate")
-    canvas.setFont('Times-Roman', 18)
-    statement = "This is to verify that %s %s , registration number %s graduated \n at our university" \
+    statement = "This is to verify that %s %s , registration number %s graduated at our university" \
                 "in %s" % (student['first_name'], student['last_name'], student['reg_number'], student['year'])
-
-    canvas.drawCentredString(4 * inch, 5 * inch, statement)
-    canvas.save()
-    print("Certificate printed successfully.")
+    output = student['reg_number'] + '.pdf'
+    pdf = pdfkit.from_string(statement, output)
+    return pdf
 
 
 if args.init == "I":
@@ -100,7 +97,6 @@ if args.init == "I":
     initialise_db()
 elif args.init == "D":
     delete_databases()
-
 elif args.init == "R":
     reinitialise_db()
 elif args.database and args.reg_number:
