@@ -2,6 +2,10 @@ import argparse
 import os
 import sqlite3
 
+from reportlab.lib.pagesizes import LETTER
+from reportlab.lib.units import inch
+from reportlab.pdfgen.canvas import Canvas
+
 parser = argparse.ArgumentParser(prog="init_db", usage="%(prog)s  [options]")
 parser.add_argument("-i", "--init", help='Initialize database')
 parser.add_argument("-d", "--database", help='Enter university database.')
@@ -42,7 +46,7 @@ def initialise_db():
     VALUES (1, 'Komborerai', 'Chikweshe', 'H140283B', 2020);'''
 
     )
-    for conn in [hit,uz,nust]:
+    for conn in [hit, uz, nust]:
         conn.commit()
         conn.close()
 
@@ -61,28 +65,47 @@ def reinitialise_db():
 
 
 def query_student(database: str, reg_number: str):
-    print(database,reg_number)
+    print(database, reg_number)
     statement = '''SELECT * FROM STUDENT WHERE REG_NUMBER=:reg_number '''
     conn = None
     if database:
         conn = sqlite3.connect('%s.db' % database)
         cursor = conn.cursor()
-        cursor.execute(statement, {"reg_number":reg_number})
-        print(cursor.fetchall())
+        result = cursor.execute(statement, {"reg_number": reg_number})
+        student = {}
+        for row in result:
+            student['first_name'] = row[1]
+            student['last_name'] = row[2]
+            student['reg_number'] = row[3]
+            student['year'] = row[4]
+        print_certificate(student)
+
         conn.close()
+
+
+def print_certificate(student):
+    canvas = Canvas("hello.pdf", pagesize=LETTER)
+    canvas.setTitle("Certificate")
+    canvas.setFont('Times-Roman', 18)
+    statement = "This is to verify that %s %s , registration number %s graduated \n at our university" \
+                "in %s" % (student['first_name'], student['last_name'], student['reg_number'], student['year'])
+
+    canvas.drawCentredString(4 * inch, 5 * inch, statement)
+    canvas.save()
+    print("Certificate printed successfully.")
 
 
 if args.init == "I":
     print("Initialization database")
     initialise_db()
 elif args.init == "D":
-   delete_databases()
+    delete_databases()
 
 elif args.init == "R":
     reinitialise_db()
 elif args.database and args.reg_number:
     query_student(args.database, args.reg_number)
-elif args.init not in ['R','I','D']:
+elif args.init not in ['R', 'I', 'D']:
     print('Invalid option selected')
 else:
     print("no option entered")
