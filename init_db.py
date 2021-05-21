@@ -3,7 +3,6 @@ import os
 import sqlite3
 
 import pdfkit
-from flask import Flask
 
 parser = argparse.ArgumentParser(prog="init_db", usage="%(prog)s  [options]")
 parser.add_argument("-i", "--init", help='Initialize database')
@@ -11,8 +10,6 @@ parser.add_argument("-d", "--database", help='Enter university database.')
 parser.add_argument("-r", "--reg_number", help='Enter student reg number. ')
 
 args = parser.parse_args()
-
-app = Flask(__name__)
 
 
 def initialise_db():
@@ -22,29 +19,159 @@ def initialise_db():
 
     statement = '''
                  CREATE TABLE STUDENT(
-            ID INT PRIMARY KEY     NOT NULL,
+            ID INT PRIMARY KEY     , 
             FIRST_NAME           TEXT    NOT NULL,
             LAST_NAME           TEXT    NOT NULL,
-          
-            REG_NUMBER        CHAR(50),
+            REG_NUMBER      TEXT UNIQUE  ,
             YEAR_OF_GRADUATION  INT
          );
          '''
     for cursor in [uz, nust, hit]:
         cursor.execute(statement)
     uz.execute(
-        '''INSERT INTO STUDENT (ID,FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
-    VALUES (1, 'Tinotenda', 'Ruzane', 'UZ01', 2020);'''
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
+    VALUES ( 'Tinotenda', 'Ruzane', 'UZ01', 2020);'''
+
+    )
+    uz.execute(
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
+    VALUES ( 'John', 'Rusambo', 'UZ03', 2020);'''
+
+    )
+    uz.execute(
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
+    VALUES ( 'Terrence', 'Zhou', 'UZ04', 2020);'''
+
+    )
+    uz.execute(
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
+    VALUES ( 'Lisa', 'Mutasa', 'UZ05', 2020);'''
+
+    )
+    uz.execute(
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
+    VALUES ( 'Charlene', 'Muzenda', 'UZ06', 2020);'''
+
+    )
+    uz.execute(
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
+    VALUES ( 'Peter', 'Chibwe', 'UZ07', 2020);'''
+
+    )
+    uz.execute(
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
+    VALUES ( 'Leo', 'Messo', 'UZ08', 2020);'''
+
+    )
+    uz.execute(
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
+    VALUES ( 'Tony', 'Montana', 'UZ09', 2020);'''
+
+    )
+    uz.execute(
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
+    VALUES ( 'Tinashe', 'Muskwe', 'UZ10', 2020);'''
+
+    )
+
+    nust.execute(
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
+    VALUES ( 'Kudakwashe', 'Kuzvindiwana', 'NUST02', 2020);'''
 
     )
     nust.execute(
-        '''INSERT INTO STUDENT (ID,FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
-    VALUES (1, 'Kudakwashe', 'Kuzvindiwana', 'NUST02', 2020);'''
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
+    VALUES ( 'Njabulo', 'Ndlovhu', 'NUST01', 2020);'''
+
+    )
+    nust.execute(
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
+    VALUES ( 'Sibusiso', 'Vilakazi', 'NUST03', 2020);'''
+
+    )
+    nust.execute(
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
+    VALUES ( 'Nhlamulo', 'Muzi', 'NUST04', 2020);'''
+
+    )
+    nust.execute(
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
+    VALUES ( 'Scelo', 'Mxolisi', 'NUST05', 2020);'''
+
+    )
+    nust.execute(
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
+    VALUES ( 'Michelle', 'Chimwanda', 'NUST06', 2020);'''
+
+    )
+    nust.execute(
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
+    VALUES ( 'Nigel', 'Muza', 'NUST07', 2020);'''
+
+    )
+    nust.execute(
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
+    VALUES ( 'Michael', 'Kapini', 'NUST08', 2020);'''
+
+    )
+    nust.execute(
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
+    VALUES ( 'Jessica', 'Magadlela', 'NUST09', 2020);'''
+
+    )
+    nust.execute(
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
+    VALUES ( 'Cyril', 'Xulu', 'NUST10', 2020);'''
 
     )
     hit.execute(
-        '''INSERT INTO STUDENT (ID,FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
-    VALUES (1, 'Komborerai', 'Chikweshe', 'H140283B', 2020);'''
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
+    VALUES ( 'Komborerai', 'Chikweshe', 'H140283B', 2020);'''
+
+    )
+    hit.execute(
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
+    VALUES ( 'Cain', 'Murambi', 'H160183D', 2020);'''
+
+    )
+    hit.execute(
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
+    VALUES ( 'Shingi', 'Kamwendo', 'H160283B', 2020);'''
+
+    )
+    hit.execute(
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
+    VALUES ( 'Omry', 'Marebera', 'H160532D', 2020);'''
+
+    )
+    hit.execute(
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
+    VALUES ( 'Yolanda', 'Chibaya', 'H160841Y', 2020);'''
+
+    )
+    hit.execute(
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
+    VALUES ( 'Nigel', 'Chonzi', 'H1604423C', 2020);'''
+
+    )
+    hit.execute(
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
+    VALUES ( 'Xander', 'Cage', 'H150295E', 2020);'''
+
+    )
+    hit.execute(
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
+    VALUES ( 'Ronald', 'Chigumbu', 'H150643r', 2020);'''
+
+    )
+    hit.execute(
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
+    VALUES ( 'Ian', 'Mugabe', 'H160419I', 2020);'''
+
+    )
+    hit.execute(
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
+    VALUES ( 'Anesu', 'Jari', 'H150834EB', 2020);'''
 
     )
     for conn in [hit, uz, nust]:
@@ -56,6 +183,7 @@ def delete_databases():
     for d in ['hit.db', 'nust.db', 'uz.db']:
         if os.path.exists(d):
             os.remove(d)
+            print("Databases deleted.")
         else:
             print("The database %s do not exist. " % (d))
 
@@ -63,6 +191,7 @@ def delete_databases():
 def reinitialise_db():
     delete_databases()
     initialise_db()
+    print("Reinitialisation complete.")
 
 
 def query_student(database: str, reg_number: str):
@@ -85,15 +214,19 @@ def query_student(database: str, reg_number: str):
 
 
 def print_certificate(student):
+    """
+
+    :param student:
+    :return:
+    """
     statement = "This is to verify that %s %s , registration number %s graduated at our university" \
-                "in %s" % (student['first_name'], student['last_name'], student['reg_number'], student['year'])
+                " in %s" % (student['first_name'], student['last_name'], student['reg_number'], student['year'])
     output = student['reg_number'] + '.pdf'
     pdf = pdfkit.from_string(statement, output)
     return pdf
 
 
 if args.init == "I":
-    print("Initialization database")
     initialise_db()
 elif args.init == "D":
     delete_databases()
