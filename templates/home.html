@@ -2,7 +2,7 @@
 
 {% block body %}
 
-    <div class="container">
+<div class="container">
     <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -28,7 +28,7 @@
             </div>
         </div>
     </div>
-    <div class="container text-center align-middle">
+    <div class="container text-center my-5">
         <p class="font-weight-normal">Welcome to the Certificate Verification System. To begin, click the button
             below: </p>
         <div class="text-center">
@@ -40,26 +40,26 @@
 
 
         {% if verified %}
-            {#            <div class="d-flex primary-color">#}
-            {#            <span class="font-weight-bolder ">Student is verified.#}
-            {#                <a class="p-2" href="{{ url_for('download',filename=file) }}"> Click here </a> to download the report.#}
-            {##}
-            {#            </span>#}
-            {#            </div>#}
+
             <div class="alert alert-success" role="alert">
-                The Student has been found. <a href="{{ url_for('download',filename=file) }}" class="alert-link">Click here
-                </a>.to download
+                The Student has been found. <a href="{{ url_for('download',filename=file) }}" class="alert-link">Click
+                here
+            </a>.to download
             </div>
+        {% elif verified == False %}
+            <div class="alert alert-error" role="alert">
+            The student has not been found.
         {% endif %}
 
 
-    </div>
-    <script>
-        $('#btn-one').click(function () {
-            $('#btn-one').html('<span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>Verifying Student...')
-                .addClass('disabled');
-        });
-    </script>
-{% endblock %}
 
-</div>
+        </div>
+        <script>
+            $('#btn-one').click(function () {
+                $('#btn-one').html('<span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>Verifying Student...')
+                    .addClass('disabled');
+            });
+        </script>
+        {% endblock %}
+
+    </div>

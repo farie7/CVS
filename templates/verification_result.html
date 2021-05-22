@@ -1,15 +1,41 @@
-{% extends 'base.html' %}
-{% block title %}Verification results{% endblock %}
-{% block body %}
-    <div class="container
-">
-        <div class="d-block mx-5 my-5 ">
-            <div class="bg-default  ">
-                <h3 class=" font-weight-bold">
-                    {{ statement }}
-                </h3>
-            </div>
-        </div>
+{#{% extends 'base.html' %}#}
+{#{% block title %}Verification results{% endblock %}#}
+{#{% block body %}#}
+{#    <div class="container#}
+{#">#}
+{#        <div class="d-block mx-5 my-5 ">#}
+{#            <div class="bg-default  ">#}
+{#                <h3 class=" font-weight-bold">#}
+{#                    {{ statement }}#}
+{#                </h3>#}
+{#            </div>#}
+{#        </div>#}
+{##}
+{#    </div>#}
+{#{% endblock %}#}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student</title>
+
+<body>
+<div class="container">
+    <h2 class="text-center h2">Certificate Verification for {{ student['first_name'] }} {{ student['last_name'] }}</h2>
+    <div class="d-block text-center">
+        <p>
+            This document proves that <strong>{{ student['first_name'] }} {{ student['last_name'] }}
+        </strong>
+            graduated
+            in the
+          <strong>>  year {{ student['year'] }}</strong>
+        </p>
+    </div>
+    <div class="d-flex align-items-center justify-content-center" style="height: 350px">
+        <div class="p-2 bd-highlight col-example"></div>
 
     </div>
-{% endblock %}
+
+</div>
+</body>
+</html>

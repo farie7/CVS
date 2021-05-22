@@ -17,8 +17,24 @@ os.makedirs(uploads_dir, exist_ok=True)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    form = VerificationForm()
-    return render_template('home.html', form=form)
+    form = VerificationForm(request.form)
+    verified = False
+    if request.method == 'POST':
+
+        if form.validate():
+            # search student in database
+            reg_number = form.reg_number.data
+            institution = form.institution.data
+
+            student = verify_student(reg_number, institution)
+            if not student:
+                return render_template('home.html', form=form, verified=verified, file=None)
+            generate_pdf(student)
+            file = student['reg_number'] + ".pdf"
+            verified = True
+            return render_template('home.html', form=form, verified=verified, file=file)
+
+    return render_template('home.html', form=form, verified=None)
 
 
 def generate_pdf(student):
@@ -27,10 +43,9 @@ def generate_pdf(student):
     :param student:
     :return:
     """
-    statement = "This is to verify that %s %s , registration number %s graduated at our university" \
-                " in %s." % (student['first_name'], student['last_name'], student['reg_number'], student['year'])
+
     output = os.path.join(uploads_dir, student['reg_number'] + '.pdf')
-    html = render_template('verification_result.html', statement=statement)
+    html = render_template('verification_result.html', student=student)
     pdfkit.from_string(html, output)
 
 
@@ -52,7 +67,8 @@ def verify_student(reg_number, institution):
             student['reg_number'] = row[3]
             student['year'] = row[4]
         conn.close()
-        return generate_pdf(student=student)
+
+        return student
 
 
 @app.route('/verify', methods=['GET', 'POST'])
@@ -62,18 +78,23 @@ def verify():
     :return:
     """
     form = VerificationForm(request.form)
+    verified = False
     if request.method == 'POST':
+
         if form.validate():
             # search student in database
             reg_number = form.reg_number.data
             institution = form.institution.data
+
             student = verify_student(reg_number, institution)
-
+            if not student:
+                return render_template('home.html', form=form, verified=verified, file=None)
+            generate_pdf(student)
             file = student['reg_number'] + ".pdf"
+            verified=True
+            return render_template('home.html', form=form, verified=verified, file=file)
 
-            return render_template('home.html', form=form, verified=True, file=file)
-
-    return render_template('home.html', form=form, verified=False)
+    return render_template('home.html', form=form, verified=None)
 
 
 @app.route('/download/<path:filename>')
