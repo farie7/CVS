@@ -16,6 +16,15 @@ def initialise_db():
     uz = sqlite3.connect('uz.db')  # You can create a new database by changing the name within the quotes
     nust = sqlite3.connect('nust.db')
     hit = sqlite3.connect('hit.db')
+    system = sqlite3.connect('system.db')
+
+    statement_1 = '''
+                 CREATE TABLE REQUESTS(
+            ID INT PRIMARY KEY     , 
+            REG_NUMBER      TEXT UNIQUE  ,
+           CREATED_AT date 
+         );
+         '''
 
     statement = '''
                  CREATE TABLE STUDENT(
@@ -28,6 +37,7 @@ def initialise_db():
          '''
     for cursor in [uz, nust, hit]:
         cursor.execute(statement)
+    system.execute(statement_1)
     uz.execute(
         '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
     VALUES ( 'Tinotenda', 'Ruzane', 'UZ01', 2020);'''
