@@ -4,6 +4,9 @@ import sqlite3
 
 import pdfkit
 
+import app
+from models import Request
+
 parser = argparse.ArgumentParser(prog="init_db", usage="%(prog)s  [options]")
 parser.add_argument("-i", "--init", help='Initialize database')
 parser.add_argument("-d", "--database", help='Enter university database.')
@@ -17,161 +20,172 @@ def initialise_db():
     nust = sqlite3.connect('nust.db')
     hit = sqlite3.connect('hit.db')
 
+    statement_1 = '''
+                 CREATE TABLE REQUESTS(
+            ID INT PRIMARY KEY     , 
+            REG_NUMBER      TEXT UNIQUE  ,
+           CREATED_AT date 
+         );
+         '''
+
     statement = '''
                  CREATE TABLE STUDENT(
             ID INT PRIMARY KEY     , 
             FIRST_NAME           TEXT    NOT NULL,
             LAST_NAME           TEXT    NOT NULL,
             REG_NUMBER      TEXT UNIQUE  ,
-            YEAR_OF_GRADUATION  INT
+            DEGREE_CLASS TEXT ,
+            PROGRAMME TEXT, 
+            YEAR_OF_GRADUATION INT
          );
          '''
     for cursor in [uz, nust, hit]:
         cursor.execute(statement)
+    # system.execute(statement_1)
     uz.execute(
-        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
-    VALUES ( 'Tinotenda', 'Ruzane', 'UZ01', 2020);'''
-
-    )
-    uz.execute(
-        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
-    VALUES ( 'John', 'Rusambo', 'UZ03', 2020);'''
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION, PROGRAMME, DEGREE_CLASS)
+    VALUES ( 'Tinotenda', 'Ruzane', 'UZ01', 2020, 'BSC Honours Degree in Computer Science','2.1');'''
 
     )
     uz.execute(
-        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
-    VALUES ( 'Terrence', 'Zhou', 'UZ04', 2020);'''
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION, PROGRAMME, DEGREE_CLASS)
+    VALUES ( 'John', 'Rusambo', 'UZ03', 2020, 'BSC Honours Degree in Computer Science','2.1');'''
 
     )
     uz.execute(
-        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
-    VALUES ( 'Lisa', 'Mutasa', 'UZ05', 2020);'''
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION, PROGRAMME, DEGREE_CLASS)
+    VALUES ( 'Terrence', 'Zhou', 'UZ04', 2020, 'BSC Honours Degree in Computer Science','2.1');'''
 
     )
     uz.execute(
-        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
-    VALUES ( 'Charlene', 'Muzenda', 'UZ06', 2020);'''
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION, PROGRAMME, DEGREE_CLASS)
+    VALUES ( 'Lisa', 'Mutasa', 'UZ05', 2020, 'BSC Honours Degree in Computer Science','2.1');'''
 
     )
     uz.execute(
-        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
-    VALUES ( 'Peter', 'Chibwe', 'UZ07', 2020);'''
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION, PROGRAMME, DEGREE_CLASS)
+    VALUES ( 'Charlene', 'Muzenda', 'UZ06', 2020, 'BSC Honours Degree in Computer Science','2.1');'''
 
     )
     uz.execute(
-        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
-    VALUES ( 'Leo', 'Messo', 'UZ08', 2020);'''
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION, PROGRAMME, DEGREE_CLASS)
+    VALUES ( 'Peter', 'Chibwe', 'UZ07', 2020, 'BSC Honours Degree in Computer Science','2.1');'''
 
     )
     uz.execute(
-        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
-    VALUES ( 'Tony', 'Montana', 'UZ09', 2020);'''
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION, PROGRAMME, DEGREE_CLASS)
+    VALUES ( 'Leo', 'Messo', 'UZ08', 2020, 'BSC Honours Degree in Computer Science','2.1');'''
 
     )
     uz.execute(
-        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
-    VALUES ( 'Tinashe', 'Muskwe', 'UZ10', 2020);'''
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION, PROGRAMME, DEGREE_CLASS)
+    VALUES ( 'Tony', 'Montana', 'UZ09', 2020, 'BSC Honours Degree in Computer Science','2.1');'''
+
+    )
+    uz.execute(
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION, PROGRAMME, DEGREE_CLASS)
+    VALUES ( 'Tinashe', 'Muskwe', 'UZ10', 2020, 'BSC Honours Degree in Computer Science','2.1');'''
 
     )
 
     nust.execute(
-        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
-    VALUES ( 'Kudakwashe', 'Kuzvindiwana', 'NUST02', 2020);'''
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION, PROGRAMME, DEGREE_CLASS)
+    VALUES ( 'Kudakwashe', 'Kuzvindiwana', 'NUST02', 2020, 'BSC Honours Degree in Computer Science','2.1');'''
 
     )
     nust.execute(
-        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
-    VALUES ( 'Njabulo', 'Ndlovhu', 'NUST01', 2020);'''
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION, PROGRAMME, DEGREE_CLASS)
+    VALUES ( 'Njabulo', 'Ndlovhu', 'NUST01', 2020, 'Bsc Honours Degree in Information Security','2.1');'''
 
     )
     nust.execute(
-        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
-    VALUES ( 'Sibusiso', 'Vilakazi', 'NUST03', 2020);'''
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION, PROGRAMME, DEGREE_CLASS)
+    VALUES ( 'Sibusiso', 'Vilakazi', 'NUST03', 2020, 'Bsc Honours Degree in Information Security','2.1');'''
 
     )
     nust.execute(
-        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
-    VALUES ( 'Nhlamulo', 'Muzi', 'NUST04', 2020);'''
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION, PROGRAMME, DEGREE_CLASS)
+    VALUES ( 'Nhlamulo', 'Muzi', 'NUST04', 2020, 'Bsc Honours Degree in Information Security','2.1');'''
 
     )
     nust.execute(
-        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
-    VALUES ( 'Scelo', 'Mxolisi', 'NUST05', 2020);'''
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION, PROGRAMME, DEGREE_CLASS)
+    VALUES ( 'Scelo', 'Mxolisi', 'NUST05', 2020, 'Bsc Honours Degree in Information Security','2.1');'''
 
     )
     nust.execute(
-        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
-    VALUES ( 'Michelle', 'Chimwanda', 'NUST06', 2020);'''
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION, PROGRAMME, DEGREE_CLASS)
+    VALUES ( 'Michelle', 'Chimwanda', 'NUST06', 2020, 'Bsc Honours Degree in Information Security','2.1');'''
 
     )
     nust.execute(
-        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
-    VALUES ( 'Nigel', 'Muza', 'NUST07', 2020);'''
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION, PROGRAMME, DEGREE_CLASS)
+    VALUES ( 'Nigel', 'Muza', 'NUST07', 2020, 'Bsc Honours Degree in Information Security','2.1');'''
 
     )
     nust.execute(
-        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
-    VALUES ( 'Michael', 'Kapini', 'NUST08', 2020);'''
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION, PROGRAMME, DEGREE_CLASS)
+    VALUES ( 'Michael', 'Kapini', 'NUST08', 2020, 'Bsc Honours Degree in Information Security','2.1');'''
 
     )
     nust.execute(
-        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
-    VALUES ( 'Jessica', 'Magadlela', 'NUST09', 2020);'''
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION, PROGRAMME, DEGREE_CLASS)
+    VALUES ( 'Jessica', 'Magadlela', 'NUST09', 2020, 'Bsc Honours Degree in Information Security','2.1');'''
 
     )
     nust.execute(
-        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
-    VALUES ( 'Cyril', 'Xulu', 'NUST10', 2020);'''
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION, PROGRAMME, DEGREE_CLASS)
+    VALUES ( 'Cyril', 'Xulu', 'NUST10', 2020, 'Bsc Honours Degree in Information Security','2.1');'''
 
     )
     hit.execute(
-        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
-    VALUES ( 'Komborerai', 'Chikweshe', 'H140283B', 2020);'''
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION, PROGRAMME, DEGREE_CLASS)
+    VALUES ( 'Komborerai', 'Chikweshe', 'H140283B', 2020, 'BTech Honours Degree in Software Engineering','2.1');'''
 
     )
     hit.execute(
-        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
-    VALUES ( 'Cain', 'Murambi', 'H160183D', 2020);'''
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION, PROGRAMME, DEGREE_CLASS)
+    VALUES ( 'Cain', 'Murambi', 'H160183D', 2020, 'BTech Honours Degree in Software Engineering','2.1');'''
 
     )
     hit.execute(
-        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
-    VALUES ( 'Shingi', 'Kamwendo', 'H160283B', 2020);'''
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION, PROGRAMME, DEGREE_CLASS)
+    VALUES ( 'Shingi', 'Kamwendo', 'H160283B', 2020, 'BTech Honours Degree in Computer Science','2.1');'''
 
     )
     hit.execute(
-        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
-    VALUES ( 'Omry', 'Marebera', 'H160532D', 2020);'''
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION, PROGRAMME, DEGREE_CLASS)
+    VALUES ( 'Omry', 'Marebera', 'H160532D', 2020, 'BTech Honours Degree in Computer Science','2.1');'''
 
     )
     hit.execute(
-        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
-    VALUES ( 'Yolanda', 'Chibaya', 'H160841Y', 2020);'''
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION, PROGRAMME, DEGREE_CLASS)
+    VALUES ( 'Yolanda', 'Chibaya', 'H160841Y', 2020, 'BTech Honours Degree in Computer Science','2.1');'''
 
     )
     hit.execute(
-        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
-    VALUES ( 'Nigel', 'Chonzi', 'H1604423C', 2020);'''
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION, PROGRAMME, DEGREE_CLASS)
+    VALUES ( 'Nigel', 'Chonzi', 'H1604423C', 2020, 'BTech Honours Degree in Information Technology','2.1');'''
 
     )
     hit.execute(
-        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
-    VALUES ( 'Xander', 'Cage', 'H150295E', 2020);'''
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION, PROGRAMME, DEGREE_CLASS)
+    VALUES ( 'Xander', 'Cage', 'H150295E', 2020, 'BTech Honours Degree in Information Technology','2.1');'''
 
     )
     hit.execute(
-        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
-    VALUES ( 'Ronald', 'Chigumbu', 'H150643r', 2020);'''
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION, PROGRAMME, DEGREE_CLASS)
+    VALUES ( 'Ronald', 'Chigumbu', 'H150643r', 2020, 'BTech Honours Degree in Information Technology','2.1');'''
 
     )
     hit.execute(
-        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
-    VALUES ( 'Ian', 'Mugabe', 'H160419I', 2020);'''
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION, PROGRAMME, DEGREE_CLASS)
+    VALUES ( 'Ian', 'Mugabe', 'H160419I', 2020, 'BTech Honours Degree in Information Security','2.1');'''
 
     )
     hit.execute(
-        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION)
-    VALUES ( 'Anesu', 'Jari', 'H150834EB', 2020);'''
+        '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION, PROGRAMME, DEGREE_CLASS)
+    VALUES ( 'Anesu', 'Jari', 'H150834EB', 2020, 'BTech Honours Degree in Information Security','2.1');'''
 
     )
     for conn in [hit, uz, nust]:

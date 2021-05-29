@@ -1,8 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <title>{% block title %}{% endblock %}</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Zimbabwe Certificate Verification System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css"/>
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
     <!-- Google Fonts -->
@@ -11,7 +16,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
     <!-- Material Design Bootstrap -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
-
     <!-- JQuery -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- Bootstrap tooltips -->
@@ -24,41 +28,86 @@
     <script type="text/javascript"
             src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
 </head>
-<header>
-    <!--Navbar -->
-    <nav class="mb-1 navbar navbar-expand-lg navbar-dark info-color">
-        <a class="navbar-brand" href="#">Navbar</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-4"
-                aria-controls="navbarSupportedContent-4" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent-4">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">
-                        <i class="fab fa-facebook-f"></i> Facebook
-                        <span class="sr-only">(current)</span>
-                    </a>
-                </li>
 
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-4" data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-user"></i> Profile </a>
-                    <div class="dropdown-menu dropdown-menu-right dropdown-info"
-                         aria-labelledby="navbarDropdownMenuLink-4">
-                        <a class="dropdown-item" href="#">My account</a>
-                        <a class="dropdown-item" href="#">Log out</a>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </nav>
-    <!--/.Navbar -->
-</header>
 <body>
-{% block body %}
-{% endblock %}
+<section class="is-fullheight">
+
+    <div class="hero-head">
+        <!--Navbar -->
+        <nav class="mb-1 navbar navbar-expand-lg navbar-dark default-color">
+            <a class="navbar-brand" href="{{ url_for('main.home') }}">Zimbabwe Certificate Verification System</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-4"
+                    aria-controls="navbarSupportedContent-4" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent-4">
+                {% if current_user.is_authenticated %}
+                    <ul class="navbar-nav ml-auto">
+
+                        <a class="nav-link font-weight-bold text-white " href="{{ url_for('main.requests') }}">My
+                            Requests</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-4" data-toggle="dropdown"
+                               aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-user"></i> Welcome {{ current_user.name }} </a>
+
+
+                            <div class="dropdown-menu dropdown-menu-right dropdown-info"
+                                 aria-labelledby="navbarDropdownMenuLink-4">
+                                <a class="dropdown-item" href="{{ url_for('main.profile') }}">My account</a>
+                                <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Log out</a>
+                            </div>
+                        </li>
+                        {#                          <a class="dropdown-item" href="{{ url_for('main.profile') }}">My account</a>#}
+                        {#                                <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Log out</a>#}
+
+                        <div class="dropdown-menu dropdown-menu-right dropdown-info"
+                             aria-labelledby="navbarDropdownMenuLink-4">
+                            <a class="dropdown-item" href="{{ url_for('main.profile') }}">My account</a>
+                            <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Log out</a>
+                        </div>
+                        </li>
+                        {#                          <a class="dropdown-item" href="{{ url_for('main.profile') }}">My account</a>#}
+                        {#                                <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Log out</a>#}
+
+                    </ul>
+                {% endif %}
+                {% if not current_user.is_authenticated %}
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="{{ url_for('auth.login') }}" class="nav-link">
+                                Login
+                            </a>
+
+                        </li>
+                        <li class="nav-item"><a href="{{ url_for('auth.signup') }}" class="nav-link">
+                            Sign Up
+                        </a></li>
+                    </ul>
+                {% endif %}
+            </div>
+        </nav>
+        <!--/.Navbar -->
+    </div>
+
+    <div class="hero-body white">
+        <div class="container has-text-centered">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+</section>
 
 </body>
+
+
 </html>
+<footer class="page-footer mb-0 bottom">
+    <div class=" alert-info text-center" role="alert">
+        <dt class="h3">Disclaimer!</dt>
+        <dd>The documents generated by Zimbabwe Certification Verification System are <b>NOT</b> intended to replace the
+            actual certificates for each student.
+        </dd>
+
+    </div>
+</footer>

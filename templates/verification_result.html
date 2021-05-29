@@ -21,14 +21,14 @@
 
 <body>
 <div class="container">
-    <h2 class="text-center h2">Certificate Verification for {{ student['first_name'] }} {{ student['last_name'] }}</h2>
+    <h2 class="text-center h1">Certificate Verification for {{ student.name }} {{ student.surname }}</h2>
     <div class="d-block text-center">
         <p>
-            This document proves that <strong>{{ student['first_name'] }} {{ student['last_name'] }}
+            This document proves that <strong>{{ student.name }} {{ student.surname }}
         </strong>
             graduated
             in the
-          <strong>>  year {{ student['year'] }}</strong>
+            <strong> year {{ student.graduationYear }}</strong>
         </p>
     </div>
     <div class="d-flex align-items-center justify-content-center" style="height: 350px">

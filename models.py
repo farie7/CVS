@@ -1,5 +1,10 @@
+from datetime import datetime, time
+
+from flask_login import UserMixin
 from sqlalchemy import *
 from sqlalchemy.ext.declarative import declarative_base
+
+from app import db
 
 Base = declarative_base()
 
@@ -9,35 +14,39 @@ class Student(Base):
     Student model
     """
     __tablename__ = "students"
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    reg_number = Column(String, unique=True)
+    reg_number = Column(String, primary_key=True, unique=True)
     name = Column(String(80), unique=True)
     surname = Column(String(80), unique=True)
-    institution = Column(String(80), nullable=False)
     programme = Column(String(80))
-    dob = Column(String(80), unique=True)
-    address = Column(String(80), unique=True)
-    email = Column(String(120), unique=True)
-    graduation_year = Column(String(120))
-
-    # institution_id = Column(Integer, ForeignKey('institution.id'),
-    #                         nullable=False)
-
-    def __init__(self, reg_number, name, surname,institution, programme, dob, address,email, graduation_year) -> None:
-        self.institution = institution
-        self.graduation_year = graduation_year
-        self.email = email
-        self.address = address
-        self.dob = dob
-        self.programme = programme
-        self.surname = surname
-        self.name = name
-        
-        self.reg_number = reg_number
+    # dob = Column(String(80), unique=True)
+    degree_class = Column(String(80))
+    graduation_year = Column(Integer())
 
     @property
     def full_name(self):
-        return self.name + "" + self.surname
+        return "%s %s" % (self.name, self.surname)
 
     def __repr__(self):
         return '<Name %r' % self.name
+
+
+class User(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(100), unique=True)
+    password1 = db.Column(db.String(100))
+    password2 = db.Column(db.String(100))
+    name = db.Column(db.String(1000))
+    company = db.Column(db.String(100))
+    surname = db.Column(db.String(100))
+    # requests = relationship('Request', backref='user', lazy=True)
+
+
+class Request(db.Model):
+    id = db.Column(Integer, primary_key=True)
+    user_id = db.Column(String, nullable=False)
+    student_id = db.Column(String, nullable=False)
+    institution_name=db.Column(String,nullable=False)
+    date_created = db.Column(Date(), default=datetime.now())
+    time_created = db.Column(String, nullable=False)
+    verified = db.Column(Boolean(), default=False)
+    file = db.Column(String)
