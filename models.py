@@ -1,5 +1,6 @@
 from datetime import datetime, time
 
+
 from flask_login import UserMixin
 from sqlalchemy import *
 from sqlalchemy.ext.declarative import declarative_base
@@ -18,8 +19,10 @@ class Student(Base):
     name = Column(String(80), unique=True)
     surname = Column(String(80), unique=True)
     programme = Column(String(80))
+
     # dob = Column(String(80), unique=True)
     degree_class = Column(String(80))
+
     graduation_year = Column(Integer())
 
     @property

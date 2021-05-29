@@ -5,7 +5,11 @@
   </component>
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$" />
+<<<<<<< HEAD
     <orderEntry type="jdk" jdkName="Python 3.8 (Login-main)" jdkType="Python SDK" />
+=======
+    <orderEntry type="jdk" jdkName="Python 3.8 (CVS)" jdkType="Python SDK" />
+>>>>>>> 01630bbdc12eb3513706261414adf09b4ad64bea
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="all" level="application" />
     <orderEntry type="library" name="twitter-bootstrap" level="application" />
