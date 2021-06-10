@@ -1,6 +1,5 @@
 from datetime import datetime, time
 
-
 from flask_login import UserMixin
 from sqlalchemy import *
 from sqlalchemy.ext.declarative import declarative_base
@@ -48,8 +47,19 @@ class Request(db.Model):
     id = db.Column(Integer, primary_key=True)
     user_id = db.Column(String, nullable=False)
     student_id = db.Column(String, nullable=False)
-    institution_name=db.Column(String,nullable=False)
+    institution_name = db.Column(String, nullable=True)
     date_created = db.Column(Date(), default=datetime.now())
     time_created = db.Column(String, nullable=False)
     verified = db.Column(Boolean(), default=False)
     file = db.Column(String)
+
+
+class RequestStatus(db.Model):
+    id = db.Column(Integer, primary_key=True)
+    user_id = db.Column(String, nullable=True)
+    student = db.Column(String, nullable=True, unique=True)
+    token_id = db.Column(String, nullable=False, unique=True)
+    # confirmed = db.Column(Boolean, default=False)
+    date_created = db.Column(Date(), default=datetime.now())
+    time_created = db.Column(String, nullable=True)
+    status = db.Column(String, default='init', nullable=True)

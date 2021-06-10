@@ -5,21 +5,12 @@
   </component>
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$" />
-<<<<<<< HEAD
-    <orderEntry type="jdk" jdkName="Python 3.8 (Login-main)" jdkType="Python SDK" />
-=======
-    <orderEntry type="jdk" jdkName="Python 3.8 (CVS)" jdkType="Python SDK" />
->>>>>>> 01630bbdc12eb3513706261414adf09b4ad64bea
+    <orderEntry type="jdk" jdkName="Python 3.8 (venv)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="all" level="application" />
-    <orderEntry type="library" name="twitter-bootstrap" level="application" />
-    <orderEntry type="library" name="mdbootstrap" level="application" />
-    <orderEntry type="library" name="all" level="application" />
-    <orderEntry type="library" name="mdbootstrap" level="application" />
-    <orderEntry type="library" name="bulma" level="application" />
-    <orderEntry type="library" name="twitter-bootstrap" level="application" />
-    <orderEntry type="library" name="jquery" level="application" />
-    <orderEntry type="library" name="popper.js" level="application" />
+  </component>
+  <component name="PyDocumentationSettings">
+    <option name="format" value="PLAIN" />
+    <option name="myDocStringFormat" value="Plain" />
   </component>
   <component name="TemplatesService">
     <option name="TEMPLATE_CONFIGURATION" value="Jinja2" />

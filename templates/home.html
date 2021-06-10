@@ -3,6 +3,13 @@
 {% block content %}
 
     <div class="container">
+        {% with messages = get_flashed_messages(with_categories=True) %}
+         {% if messages %}
+               {% for category, message in messages %}
+                   <div class="flashes"><p class="{{ category }}">{{ message }}</p></div>
+               {% endfor %}
+         {% endif %}
+      {% endwith %}
     <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -14,14 +21,18 @@
                     </button>
                 </div>
                 <form action="{{ url_for('main.home') }}" method="post" class="modal-body mx-3 ">
-                    <div class="md-form mb-5">
-                        {{ form.reg_number.label }}
-                        {{ form.reg_number(class_='form-control') }}
-                    </div>
-                    {{ form.institution.label }}:
-                    {{ form.institution(class_='form-control') }}
+                   <p>{{ form.institution.label }}</p>
+                                   <p>{{ form.institution(class_='form-control') }}</p>
+                    {#                    {{ form.reg_number.label }}#}
+                    {#                    {{ form.reg_number(class_='form-control') }}#}
+                   <p>{{ form.email.label }}</p>
+                   <p>{{ form.email(class_='form-control') }}</p>
+
+                    <p>{{ form.password.label(class_="font-semibold") }}</p>
+                   <p> {{ form.password(class_='form-control') }}</p>
+
                     <div class="modal-footer d-flex justify-content-center">
-                        <button type="submit" id="btn-one" class="btn btn-default">VERIFY</button>
+                        <button type="submit" id="btn-one" class="btn btn-default">SEND EMAIL</button>
                     </div>
                 </form>
 
@@ -29,7 +40,7 @@
         </div>
     </div>
 
-    <div class="container text-center my-5  " >
+    <div class="container text-center my-5  ">
     <h3 class="font-weight-normal text-black-50">Welcome to the Zimbabwe Certificate Verification System
     </h3>
     <p class="font-weight-normal">To verify a students certificate, click the button below:</p>
@@ -39,12 +50,7 @@
             Create new request
         </a>
     </div>
-
-
-
     {% if verified %}
-
-
         <div class="alert alert-success" role="alert">
             We can confirm that the student's certificate is valid. <a
                 href="{{ url_for('main.download',filename=file) }}" class="alert-link">Click

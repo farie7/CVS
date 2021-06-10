@@ -50,11 +50,7 @@ def initialise_db():
          '''
     for cursor in [uz, nust, hit]:
         cursor.execute(statement)
-<<<<<<< HEAD
-    # system.execute(statement_1)
-=======
-    system.execute(statement_1)
->>>>>>> 01630bbdc12eb3513706261414adf09b4ad64bea
+
     uz.execute(
         '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION, PROGRAMME, DEGREE_CLASS)
     VALUES ( 'Tinotenda', 'Ruzane', 'UZ01', 2020, 'BSC Honours Degree in Computer Science','2.1');'''
