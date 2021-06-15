@@ -64,16 +64,18 @@ def home():
     if request.method == 'POST' and form.validate():
         institute = universities[form.institution.data]
         # Generate token for confirmation url using recipient's email
+        global token
         token = generate_confirmation_token(form.email.data)
         # Urls for confirm and reject responses
-        confirm_url = url_for('main.handle_consent_approved', token=token, _external=True)
-        reject_url = url_for('main.handle_consent_approved', token=token, _external=True)
-        message = "%s is seeking your approval of consent to verify your certificate from %s." % (
+        confirmation_url = url_for('main.handle_confirming', _external=True)
+
+        message = "%s is seeking your approval of consent to verify your certificate from %s. " \
+                  "please click on the link to confirm " % (
             current_user.company, institute)
 
         # create html page with message body and html links
-        html = render_template('student_consent_request.html', confirm_url=confirm_url, reject_url=reject_url,
-                               message=message)
+        html = render_template('student_consent_request.html',
+                               message=message,  confirmation_url=confirmation_url)
 
         try:
             send_email(recipient=form.email.data, password=form.password.data, template=html)
@@ -125,8 +127,14 @@ def download(filename):
     return send_file(path, as_attachment=True)
 
 
+@main.route('/confirmation')
+def handle_confirming():
+    confirm_url = url_for('main.handle_consent_approved', token=token, _external=True)
+    reject_url = url_for('main.handle_consent_rejected', token=token, _external=True)
+    return render_template('consent_form.html', confirm_url=confirm_url, reject_url=reject_url)
+
+
 @main.route('/confirm/<token>')
-@login_required
 def handle_consent_approved(token):
     req = RequestStatus.query.filter_by(token_id=token).first()
     # req.status = "CONFIRMED"
@@ -138,8 +146,7 @@ def handle_consent_approved(token):
 
 
 @main.route('/decline/<token>')
-@login_required
-def handle_consent_reject(token):
+def handle_consent_rejected(token):
     # query consent request by token
     req = RequestStatus.query.filter_by(token_id=token).first()
     setattr(req, 'status', 'REJECTED')
