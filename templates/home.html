@@ -6,7 +6,7 @@
     {% with messages = get_flashed_messages(with_categories=True) %}
         {% if messages %}
             {% for category, message in messages %}
-                <div class="category"><p class="{{ category }}">{{ message }}</p></div>
+                <div class="flashes"><p class="{{ category }}">{{ message }}</p></div>
             {% endfor %}
         {% endif %}
     {% endwith %}
@@ -25,7 +25,7 @@
                     <p>{{ form.institution(class_='form-control') }}</p>
                     {#                    {{ form.reg_number.label }}#}
                     {#                    {{ form.reg_number(class_='form-control') }}#}
-                    <p class="font-semibold">{{ "Enter password for %s" % current_user.email }}</p>
+                    <p>{{ form.email.label }}</p>
                     <p>{{ form.email(class_='form-control') }}</p>
 
                     <p>{{ form.password.label(class_="font-semibold") }}</p>
@@ -39,36 +39,6 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="modalSubscriptionForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header text-center">
-                    <h4 class="modal-title w-100 font-weight-bold">APPLICATION FOR CONSENT</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form class="modal-body mx-3" action="{{ url_for('main.home') }}" method="POST">
-                    <div class="md-form mb-4 ">
-                        <p>{{ form.institution.label }}</p>
-                        <p>{{ form.institution(class_='form-control') }}<
-                            {{ form.email(class_='form-control validate',placeholder='Enter email of student') }}
-                    </div>
-                    <div class="md-form input-group">
-                        <input type="email" value="{{ current_user.email }}"/>
-                        {{ form.password(class_='form-control validate',placeholder='Enter your password') }}
-                    </div>
-                    <div class="modal-footer d-flex justify-content-center">
-                        <button type="submit" id="btn-one" class="btn btn-default">SEND APPLICATION</button>
-                    </div>
-                </form>
-
-
-            </div>
-        </div>
-    </div>
-
 
     <div class="container text-center my-5  ">
     <h3 class="font-weight-normal text-black-50">Welcome to the Zimbabwe Certificate Verification System
@@ -76,7 +46,7 @@
     <p class="font-weight-normal">To verify a students certificate, click the button below:</p>
     <div class="text-center">
         <a href="" class="btn btn-default rounded-0 mb-4 font-weight-bold" data-toggle="modal"
-           data-target="#modalSubscriptionForm">
+           data-target="#modalLoginForm">
             Create new request
         </a>
     </div>

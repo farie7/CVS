@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 email_validator==1.1.2
 flask==1.1.1
 Flask-Login==0.5.0
@@ -10,3 +11,15 @@ Werkzeug==0.16.1
 SQLAlchemy==1.4.15
 Jinja2==2.10.1
 psycopg2-binary==2.9
+=======
+Flask==1.1.1
+Flask-Login==0.5.0
+Flask-Migrate==3.0.0
+Flask-SQLAlchemy==2.5.1
+pdfkit==0.6.1
+Flask-Mail==0.9.1
+WTForms==2.3.3
+Werkzeug==0.16.1
+SQLAlchemy==1.4.15
+Jinja2==2.10.1
+>>>>>>> d63d48656716b47d598db2be1044e24f73a0d2ed

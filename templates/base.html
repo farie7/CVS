@@ -1,5 +1,6 @@
+
 <!DOCTYPE html>
-<html lang="fr">
+<html>
 
 <head>
     <meta charset="utf-8">
@@ -44,8 +45,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent-4">
                 {% if current_user.is_authenticated %}
                     <ul class="navbar-nav ml-auto">
-                        <a href="{{ url_for('main.messages') }}" class="nav-link font-weight"> Messages <span
-                                class="badge badge-danger ml-2">{{ current_user.get_number_of_messages() }}</span></a>
+
                         <a class="nav-link font-weight-bold text-white " href="{{ url_for('main.requests') }}">My
                             Requests</a>
                         <li class="nav-item dropdown">
@@ -101,21 +101,21 @@
 </section>
 
 
-<div class="dropdown-menu dropdown-menu-right dropdown-info"
-     aria-labelledby="navbarDropdownMenuLink-4">
-    <a class="dropdown-item" href="{{ url_for('main.profile') }}">My account</a>
-    <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Log out</a>
-</div>
-</li>
+                            <div class="dropdown-menu dropdown-menu-right dropdown-info"
+                                 aria-labelledby="navbarDropdownMenuLink-4">
+                                <a class="dropdown-item" href="{{ url_for('main.profile') }}">My account</a>
+                                <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Log out</a>
+                            </div>
+                        </li>
 
 
-</ul>
+                    </ul>
 
 
-</div>
-</nav>
-<!--/.Navbar -->
-</div>
+            </div>
+        </nav>
+        <!--/.Navbar -->
+    </div>
 
 
 </section>

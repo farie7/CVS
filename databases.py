@@ -148,3 +148,4 @@ def seed_databases():
 if __name__ == "__main__":
     init()
     create_tables()
+
