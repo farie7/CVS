@@ -20,7 +20,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="{{ url_for('main.home') }}" method="post" class="modal-body mx-3 ">
+                <form action="{{ url_for('home') }}" method="post" class="modal-body mx-3 ">
                     <p>{{ form.institution.label }}</p>
                     <p>{{ form.institution(class_='form-control') }}</p>
                     {#                    {{ form.reg_number.label }}#}
@@ -53,7 +53,7 @@
     {% if verified %}
         <div class="alert alert-success" role="alert">
             We can confirm that the student's certificate is valid. <a
-                href="{{ url_for('main.download',filename=file) }}" class="alert-link">Click
+                href="{{ url_for('download',filename=file) }}" class="alert-link">Click
             here
         </a>to download the certificate of acknowledgement.
         </div>

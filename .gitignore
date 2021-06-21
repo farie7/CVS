@@ -3,4 +3,4 @@
 # ignore all logs
 *.log
 *.pdf
-Ubuntu/
+../dev_test/Ubuntu/

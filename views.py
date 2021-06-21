@@ -7,7 +7,7 @@ from search import app
 @app.route('/detail-list/')
 def details():
     myStudent = Student.query.all()
-    return render_template('student_details_list.html', myStudent=myStudent)
+    return render_template('dev_test/student_details_list.html', myStudent=myStudent)
 
 
 @app.route('/details-capture/', methods=['POST'])

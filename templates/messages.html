@@ -35,7 +35,7 @@
         </table>
         <!-- Pagination Links-->
         <div class="text-right">
-            <a href="{{ url_for('main.requests', page=data.prev_num) }}"
+            <a href="{{ url_for('requests', page=data.prev_num) }}"
                class="btn btn-outline-dark
        {% if data.page == 1 %}disabled{% endif %}">
                 &laquo;
@@ -44,12 +44,12 @@
                 {% if page_num %}
                     <!-- Check for the active page and set the link to "Active"-->
                     {% if data.page == page_num %}
-                        <a href="{{ url_for('main.requests', page=page_num) }}"
+                        <a href="{{ url_for('requests', page=page_num) }}"
                            class="btn btn-dark">
                             {{ page_num }}
                         </a>
                     {% else %}
-                        <a href="{{ url_for('main.requests', page=page_num) }}"
+                        <a href="{{ url_for('requests', page=page_num) }}"
                            class="btn btn-outline-dark">
                             {{ page_num }}
                         </a>
@@ -57,7 +57,7 @@
                 {% else %}
                     ...
                 {% endif %}
-            {% endfor %} <a href="{{ url_for('main.requests', page=data.next_num) }}"
+            {% endfor %} <a href="{{ url_for('requests', page=data.next_num) }}"
                             class="btn btn-outline-dark
        {% if data.page == data.pages %}disabled{% endif %}">
             &raquo;

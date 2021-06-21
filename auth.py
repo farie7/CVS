@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, url_for, redirect, request, flash
-from app import db
+from setup_app import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from models import User
 from flask_login import login_user, login_required, logout_user
@@ -20,7 +20,7 @@ def login():
             flash('Please check your login details and try again.')
             return redirect(url_for('auth.login'))
         login_user(user, remember=remember)
-        return redirect(url_for('main.home'))
+        return redirect(url_for('home'))
     else:
         return render_template('login.html')
 
@@ -60,4 +60,4 @@ def signup():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('main.index'))
+    return redirect(url_for('index'))

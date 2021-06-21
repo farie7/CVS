@@ -19,7 +19,7 @@ def print_document(student: Student, institution) -> None:
     packet = io.BytesIO()
     can = canvas.Canvas(packet, pagesize=letter)
     can.setFillColorRGB(0, 0, 0)
-    pdfmetrics.registerFont(TTFont('Ubuntu', 'Ubuntu/Ubuntu-Bold.ttf'))
+    pdfmetrics.registerFont(TTFont('Ubuntu', '../dev_test/Ubuntu/Ubuntu-Bold.ttf'))
     can.setFont("Ubuntu", 15,)
 
     can.drawString(x=250, y=596, text=student.name)
