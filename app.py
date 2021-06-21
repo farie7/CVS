@@ -9,7 +9,7 @@ from sqlalchemy import desc
 import setup_app
 from dev_test.databases import save
 from email_manager import send_email
-from forms import VerificationForm
+from forms import ApplicationConsentForm
 # from init_db import query_student
 from models import RequestStatus, Message
 from token_generator import generate_confirmation_token, confirm_token
@@ -66,7 +66,7 @@ def messages():
 @app.route('/home', methods=['GET', 'POST'])
 @login_required
 def home():
-    form = VerificationForm(request.form)
+    form = ApplicationConsentForm(request.form)
     global institute
     req = RequestStatus()
     req.user_id = current_user.id
@@ -75,10 +75,10 @@ def home():
         print("post")
         institute = universities[form.institution.data]
         # Generate token for confirmation url using recipient's email
-        token = generate_confirmation_token(form.email.data)
+        token = generate_confirmation_token(form.student_email.data)
         # Urls for confirm and reject responses
-        confirm_url = url_for('app.handle_consent_approved', token=token, _external=True)
-        reject_url = url_for('app.handle_consent_rejected', token=token, _external=True)
+        confirm_url = url_for('handle_consent_approved', token=token, _external=True)
+        reject_url = url_for('handle_consent_rejected', token=token, _external=True)
         message = "%s is seeking your approval of consent to verify your certificate from %s." % (
             current_user.company, institute)
 
@@ -86,13 +86,13 @@ def home():
         html = render_template('student_consent_request.html', confirm_url=confirm_url, reject_url=reject_url,
                                message=message)
 
-        sent = send_email(recipient=form.email.data, password=form.password.data, template=html)
+        sent = send_email(recipient=form.student_email.data, password=form.password.data, template=html)
         print(sent)
         if sent:
             req.token_id = token
             req.status = "PENDING"
             if hasattr(req, 'student'):
-                setattr(req, 'student', form.email.data)
+                setattr(req, 'student', form.student_email.data)
             save(req)
             flash('Your have successfully sent your request.', 'success')
         else:
@@ -177,6 +177,6 @@ def handle_consent_rejected(token: str):
 
 
 if __name__ == '__main__':
-    app = setup_app.create_app()
-    app.app_context().push()
+    main = setup_app.create_app()
+    main.app_context().push()
     app.run(debug=True, host="0.0.0.0")

@@ -25,10 +25,12 @@
                     <p>{{ form.institution(class_='form-control') }}</p>
                     {#                    {{ form.reg_number.label }}#}
                     {#                    {{ form.reg_number(class_='form-control') }}#}
-                    <p>{{ form.email.label }}</p>
-                    <p>{{ form.email(class_='form-control') }}</p>
+                    <p>{{ form.student_email.label(class_="font-bold") }}</p>
+                    <p>{{ form.student_email(class_='form-control') }}</p>
+                    <p>{{ form.user_email.label }} </p>
 
-                    <p>{{ form.password.label(class_="font-semibold") }}</p>
+                    <p>{{ form.user_email(class_='form-control',value=current_user.email) }} </p>
+                    <p>Enter your password (Gmail)</p>
                     <p> {{ form.password(class_='form-control') }}</p>
 
                     <div class="modal-footer d-flex justify-content-center">

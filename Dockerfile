@@ -6,8 +6,9 @@ COPY . /app
 WORKDIR /app
 RUN pip install -r requirements.txt
 EXPOSE 5000
-RUN python3 init_db.py --i R
 
+RUN python3 init_db.py --i I
+RUN python3 init_db.py --i R
 ENTRYPOINT ["python3"]
 
 CMD [ "app.py" ]
