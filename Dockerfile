@@ -10,4 +10,4 @@ RUN python3 init_db.py --i R
 
 ENTRYPOINT ["python3"]
 
-CMD [ "main.py" ]
+CMD [ "app.py" ]
