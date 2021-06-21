@@ -1,5 +1,8 @@
+from flask_login import current_user
 from wtforms import StringField, Form, validators, SelectField, PasswordField
 from wtforms.fields.html5 import EmailField
+
+
 
 
 class VerificationForm(Form):
@@ -8,8 +11,7 @@ class VerificationForm(Form):
                                        ('nust', 'National University of Science and Technology')]
                               , validators=[validators.InputRequired()])
     # reg_number = StringField(label="Student Registration Number", validators=[validators.InputRequired()])
-    email = EmailField(label="Student Email", validators=[validators.InputRequired(), validators.Email()])
-
-    password = PasswordField(u'Enter Password (Email) ', [
-        validators.DataRequired(),
+    email = EmailField(label="Student's Email Address", validators=[validators.InputRequired(), validators.Email()])
+    password = PasswordField(f"Password for", [
+        validators.InputRequired(),
     ])

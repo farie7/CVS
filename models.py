@@ -1,6 +1,6 @@
 from datetime import datetime, time
 
-from flask_login import UserMixin
+from flask_login import UserMixin, current_user
 from sqlalchemy import *
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -40,7 +40,10 @@ class User(db.Model, UserMixin):
     name = db.Column(db.String(1000))
     company = db.Column(db.String(100))
     surname = db.Column(db.String(100))
+
     # requests = relationship('Request', backref='user', lazy=True)
+    def get_number_of_messages(self):
+        return Message.query.filter_by(user_id=current_user.id).count()
 
 
 class Request(db.Model):
@@ -63,3 +66,12 @@ class RequestStatus(db.Model):
     date_created = db.Column(Date(), default=datetime.now())
     time_created = db.Column(String, nullable=True)
     status = db.Column(String, default='init', nullable=True)
+
+
+class Message(db.Model):
+    id = db.Column(Integer, primary_key=True)
+    user_id = db.Column(String, nullable=True)
+
+    message = db.Column(String, nullable=True)
+    date_created = db.Column(Date(), default=datetime.now())
+    time_created = db.Column(String, nullable=True)

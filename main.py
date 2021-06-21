@@ -1,21 +1,18 @@
 import datetime
 import os
-import sqlite3
-from threading import Thread
 
-from flask import Blueprint, render_template, request, flash, url_for, redirect
+from flask import Blueprint, render_template, request, flash, url_for
 from flask import send_file
 from flask_login import login_required, current_user
-from flask_mail import Message, Mail
-from sqlalchemy import desc, asc
+from sqlalchemy import desc
 
 import app
-from create_pdf import print_document
+from databases import save
 from email_manager import send_email
 from forms import VerificationForm
 # from init_db import query_student
-from models import Student, Request, RequestStatus
-from token_generator import confirm_token, generate_confirmation_token
+from models import RequestStatus, Message
+from token_generator import generate_confirmation_token, confirm_token
 
 main = Blueprint('main', __name__)
 
@@ -53,6 +50,19 @@ def requests():
     return render_template('requests.html', data=request_data)
 
 
+@main.route('/messages')
+@login_required
+def messages():
+    # Set the pagination configuration
+    page = request.args.get('page', 1, type=int)
+    data = Message.query.filter_by(user_id=current_user.id).order_by(
+        desc(Message.date_created)).paginate(
+        page=page,
+        per_page=ROWS_PER_PAGE)
+
+    return render_template('messages.html', data=data)
+
+
 @main.route('/home', methods=['GET', 'POST'])
 @login_required
 def home():
@@ -62,12 +72,13 @@ def home():
     req.user_id = current_user.id
 
     if request.method == 'POST' and form.validate():
+        print("post")
         institute = universities[form.institution.data]
         # Generate token for confirmation url using recipient's email
         token = generate_confirmation_token(form.email.data)
         # Urls for confirm and reject responses
         confirm_url = url_for('main.handle_consent_approved', token=token, _external=True)
-        reject_url = url_for('main.handle_consent_approved', token=token, _external=True)
+        reject_url = url_for('main.handle_consent_rejected', token=token, _external=True)
         message = "%s is seeking your approval of consent to verify your certificate from %s." % (
             current_user.company, institute)
 
@@ -75,19 +86,17 @@ def home():
         html = render_template('student_consent_request.html', confirm_url=confirm_url, reject_url=reject_url,
                                message=message)
 
-        try:
-            send_email(recipient=form.email.data, password=form.password.data, template=html)
+        sent = send_email(recipient=form.email.data, password=form.password.data, template=html)
+        print(sent)
+        if sent:
             req.token_id = token
             req.status = "PENDING"
             if hasattr(req, 'student'):
-                setattr(req,
-                'student',form.email.data)
-            app.db.session.add(req)
-            app.db.session.commit()
-            flash('You have successfully sent your request has been sent', 'success')
-
-        except Exception as e:
-            flash(e.__str__(), "danger")
+                setattr(req, 'student', form.email.data)
+            save(req)
+            flash('Your have successfully sent your request.', 'success')
+        else:
+            flash('Your email has not been sent. Please try again.', 'danger')
 
     #     # search student in database
     #     reg_number = form.reg_number.data
@@ -128,28 +137,46 @@ def download(filename):
 @main.route('/confirm/<token>')
 @login_required
 def handle_consent_approved(token):
-    req = RequestStatus.query.filter_by(token_id=token).first()
-    # req.status = "CONFIRMED"
-    setattr(req, 'status', 'CONFIRMED')
-    setattr(req, 'time_created', datetime.datetime.now().strftime("%H:%M:%S"))
+    try:
+        email = confirm_token(token)
 
-    app.db.session.add(req), app.db.session.commit()
-    return render_template('consent_approved.html', institute=institute)
+    except:
+        print('The confirmation link is invalid or has expired.')
+
+    req = RequestStatus.query.filter_by(token_id=token).first()
+
+    # req.status = "CONFIRMED"
+    if req:
+        req.status = 'CONFIRMED'
+        req.time_created = datetime.datetime.now().strftime("%H:%M:%S")
+        obj = Message()
+        obj.user_id = current_user.id
+        student = req.student
+        message = "{} has approved your request to verify their certificate.".format(student)
+        obj.message = message
+        obj.time_created = datetime.datetime.now().strftime("%H:%M:%S")
+        from databases import save
+        save(req)
+        save(obj)
+
+        return render_template('consent_approved.html', institute=institute)
+    return render_template('error_page.html', institute=institute)
 
 
 @main.route('/decline/<token>')
 @login_required
-def handle_consent_reject(token):
+def handle_consent_rejected(token):
     # query consent request by token
     req = RequestStatus.query.filter_by(token_id=token).first()
-    setattr(req, 'status', 'REJECTED')
-    setattr(req, 'time_created', datetime.datetime.now().strftime("%H:%M:%S"))
-    app.db.session.add(req)
-    app.db.session.commit()
+    if req:
+        setattr(req, 'status', 'REJECTED')
+        setattr(req, 'time_created', datetime.datetime.now().strftime("%H:%M:%S"))
+        from databases import save
+        save(req)
     return render_template('consent_rejected.html', institute=institute)
 
 
 if __name__ == '__main__':
     app = app.create_app()
     app.app_context().push()
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0")
