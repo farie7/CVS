@@ -4,7 +4,7 @@ import sqlite3
 
 import pdfkit
 
-import app
+import setup_app
 from models import Request
 
 parser = argparse.ArgumentParser(prog="init_db", usage="%(prog)s  [options]")
