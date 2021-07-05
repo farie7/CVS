@@ -6,7 +6,6 @@ from models import Student
 
 def verify_student(reg_number: str, institution: str):
     """
-
     :param reg_number:
     :param institution:
     """

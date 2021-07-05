@@ -1,32 +1,15 @@
 {% extends 'base.html' %}
-<head>
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script>
-        $(function () {
 
-            $("#id_institution").autocomplete({
-                source: {{ url_for('home') }},
-
-                min_length: 2
-            });
-
-
-        });
-    </script>
-    <title></title>
-</head>
 {% block content %}
 
-    <div >
-    {% with messages = get_flashed_messages(with_categories=True) %}
-        {% if messages %}
-            {% for category, message in messages %}
-                <div class="flashes"><p class="{{ category }}">{{ message }}</p></div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=True) %}
+         {% if messages %}
+               {% for category, message in messages %}
+                   <div class="flashes"><p class="{{ category }}">{{ message }}</p></div>
+               {% endfor %}
+         {% endif %}
+      {% endwith %}
     <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -37,18 +20,16 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="{{ url_for('home') }}" method="post" class="modal-body mx-3 ">
-                    <p>{{ form.institution.label }}</p>
-                    <p>{{ form.institution(class_='form-control') }}</p>
+                <form action="{{ url_for('main.home') }}" method="post" class="modal-body mx-3 ">
+                   <p>{{ form.institution.label }}</p>
+                                   <p>{{ form.institution(class_='form-control') }}</p>
                     {#                    {{ form.reg_number.label }}#}
                     {#                    {{ form.reg_number(class_='form-control') }}#}
-                    <p>{{ form.student_email.label(class_="font-bold") }}</p>
-                    <p>{{ form.student_email(class_='form-control') }}</p>
-                    <p>{{ form.user_email.label }} </p>
+                   <p>{{ form.email.label }}</p>
+                   <p>{{ form.email(class_='form-control') }}</p>
 
-                    <p>{{ form.user_email(class_='form-control',value=current_user.email) }} </p>
-                    <p>Enter your password (Gmail)</p>
-                    <p> {{ form.password(class_='form-control') }}</p>
+                    <p>{{ form.password.label(class_="font-semibold") }}</p>
+                   <p> {{ form.password(class_='form-control') }}</p>
 
                     <div class="modal-footer d-flex justify-content-center">
                         <button type="submit" id="btn-one" class="btn btn-default">SEND EMAIL</button>
@@ -60,7 +41,7 @@
     </div>
 
     <div class="container text-center my-5  ">
-    <h3 class="font-weight-normal text-black-50">Welcome to the Zimbabwe Certificate Verification System
+    <h3 class="font-weight-normal text-black-50">Welcome to the Universities and Colleges of Zimbabwe Online CertificateVerification System (ZOCVS)
     </h3>
     <p class="font-weight-normal">To verify a students certificate, click the button below:</p>
     <div class="text-center">
@@ -72,7 +53,7 @@
     {% if verified %}
         <div class="alert alert-success" role="alert">
             We can confirm that the student's certificate is valid. <a
-                href="{{ url_for('download',filename=file) }}" class="alert-link">Click
+                href="{{ url_for('main.download',filename=file) }}" class="alert-link">Click
             here
         </a>to download the certificate of acknowledgement.
         </div>
