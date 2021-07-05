@@ -1,1 +1,9 @@
+
+
+# ignore all logs
+*.log
+*.pdf
+../dev_test/Ubuntu/
+.idea/
+.xml
 *.pyc
