@@ -1,9 +1,11 @@
-import datetime
+# import datetime
+from datetime import datetime
+#from datetime import datetime
 import os
 import sqlite3
 from threading import Thread
 
-from flask import Blueprint, render_template, request, flash, url_for, redirect
+from flask import Blueprint, render_template, request, flash, url_for, redirect, jsonify
 from flask import send_file
 from flask_login import login_required, current_user
 from flask_mail import Message, Mail
@@ -15,6 +17,7 @@ from email_manager import send_email
 from forms import VerificationForm
 # from init_db import query_student
 from models import Student, Request, RequestStatus
+"""Notification"""
 from token_generator import confirm_token, generate_confirmation_token
 
 main = Blueprint('main', __name__)
@@ -43,6 +46,10 @@ ROWS_PER_PAGE = 10
 @main.route('/requests')
 @login_required
 def requests():
+    current_user.last_request_view_time = datetime.utcnow()
+    # current_user.add_notification('unread_message_count', 0)
+    app.db.session.commit()
+    # changing the datetime to now !!
     # Set the pagination configuration
     page = request.args.get('page', 1, type=int)
     request_data = RequestStatus.query.filter_by(user_id=current_user.id).order_by(
@@ -85,8 +92,9 @@ def home():
                 setattr(req,
                 'student',form.email.data)
             app.db.session.add(req)
+            #current_user.add_notification('unread_message_count', current_user.request_change())
             app.db.session.commit()
-            flash('You have successfully sent your request has been sent', 'success')
+            flash('You have successfully made your query, your request has been sent', 'success')
 
         except Exception as e:
             flash(e.__str__(), "danger")
@@ -139,7 +147,7 @@ def handle_consent_approved(token):
     req = RequestStatus.query.filter_by(token_id=token).first()
     # req.status = "CONFIRMED"
     setattr(req, 'status', 'CONFIRMED')
-    setattr(req, 'time_created', datetime.datetime.now().strftime("%H:%M:%S"))
+    setattr(req, 'time_created', datetime.now().strftime("%H:%M:%S"))
 
     app.db.session.add(req), app.db.session.commit()
     return render_template('consent_approved.html', institute=institute)
@@ -156,7 +164,27 @@ def handle_consent_rejected(token):
     return render_template('consent_rejected.html', institute=institute)
 
 
+@main.route('/how')
+def how_it_works():
+    return render_template('how_it_works.html')
+
+
+# @main.route('/notifications')
+# # @login_required
+# def notifications():
+#     since = request.args.get('since', 0.0, type=float)
+#     notifications = current_user.notifications.filter(
+#         Notification.timestamp > since).order_by(Notification.timestamp.asc())
+#     return jsonify([{
+#         'name': n.name,
+#         'data': n.get_data(),
+#         'timestamp': n.timestamp
+#     } for n in notifications])
+
+
 if __name__ == '__main__':
     app = app.create_app()
     app.app_context().push()
     app.run(debug=True)
+
+
