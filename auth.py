@@ -1,4 +1,6 @@
 from flask import Blueprint, render_template, url_for, redirect, request, flash
+
+from dev_test.databases import save
 from setup_app import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from models import User
@@ -47,9 +49,10 @@ def signup():
 
         new_user = User(email=email, name=name, password1=generate_password_hash(password1, method='sha256'),
                         company=company, surname=surname, password2=generate_password_hash(password2, method='sha256'))
-
-        db.session.add(new_user)
-        db.session.commit()
+        try:
+            save(new_user)
+        except:
+            flash(f'Could not save ${new_user.name}')
 
         return redirect(url_for('auth.login'))
     else:

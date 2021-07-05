@@ -1,6 +1,1 @@
-
-
-# ignore all logs
-*.log
-*.pdf
-../dev_test/Ubuntu/
+*.pyc

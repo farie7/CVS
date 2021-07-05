@@ -19,7 +19,6 @@ def initialise_db():
     uz = sqlite3.connect('uz.db')  # You can create a new database by changing the name within the quotes
     nust = sqlite3.connect('nust.db')
     hit = sqlite3.connect('hit.db')
-    system = sqlite3.connect('system.db')
 
     statement_1 = '''
                  CREATE TABLE REQUESTS(
@@ -53,42 +52,42 @@ def initialise_db():
 
     uz.execute(
         '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION, PROGRAMME, DEGREE_CLASS)
-    VALUES ( 'Tinotenda', 'Ruzane', 'UZ01', 2020, 'BSC Honours Degree in Computer Science','2.1');'''
+    VALUES ( 'Tinotenda', 'Ruzane', 'UZ01', 2011, 'BSC Honours Degree in Computer Science','2.1');'''
 
     )
     uz.execute(
         '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION, PROGRAMME, DEGREE_CLASS)
-    VALUES ( 'John', 'Rusambo', 'UZ03', 2020, 'BSC Honours Degree in Computer Science','2.1');'''
+    VALUES ( 'John', 'Rusambo', 'UZ03', 2011, 'BSC Honours Degree in Computer Science','2.1');'''
 
     )
     uz.execute(
         '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION, PROGRAMME, DEGREE_CLASS)
-    VALUES ( 'Terrence', 'Zhou', 'UZ04', 2020, 'BSC Honours Degree in Computer Science','2.1');'''
+    VALUES ( 'Terrence', 'Zhou', 'UZ04', 2011, 'BSC Honours Degree in Computer Science','2.1');'''
 
     )
     uz.execute(
         '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION, PROGRAMME, DEGREE_CLASS)
-    VALUES ( 'Lisa', 'Mutasa', 'UZ05', 2020, 'BSC Honours Degree in Computer Science','2.1');'''
+    VALUES ( 'Lisa', 'Mutasa', 'UZ05', 2002, 'BSC Honours Degree in Computer Science','2.1');'''
 
     )
     uz.execute(
         '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION, PROGRAMME, DEGREE_CLASS)
-    VALUES ( 'Charlene', 'Muzenda', 'UZ06', 2020, 'BSC Honours Degree in Computer Science','2.1');'''
+    VALUES ( 'Charlene', 'Muzenda', 'UZ06', 2002, 'BSC Honours Degree in Computer Science','2.1');'''
 
     )
     uz.execute(
         '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION, PROGRAMME, DEGREE_CLASS)
-    VALUES ( 'Peter', 'Chibwe', 'UZ07', 2020, 'BSC Honours Degree in Computer Science','2.1');'''
+    VALUES ( 'Peter', 'Chibwe', 'UZ07', 2016, 'BSC Honours Degree in Computer Science','2.1');'''
 
     )
     uz.execute(
         '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION, PROGRAMME, DEGREE_CLASS)
-    VALUES ( 'Leo', 'Messo', 'UZ08', 2020, 'BSC Honours Degree in Computer Science','2.1');'''
+    VALUES ( 'Leo', 'Messo', 'UZ08', 2016, 'BSC Honours Degree in Computer Science','2.1');'''
 
     )
     uz.execute(
         '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION, PROGRAMME, DEGREE_CLASS)
-    VALUES ( 'Tony', 'Montana', 'UZ09', 2020, 'BSC Honours Degree in Computer Science','2.1');'''
+    VALUES ( 'Tony', 'Montana', 'UZ09', 2012, 'BSC Honours Degree in Computer Science','2.1');'''
 
     )
     uz.execute(
@@ -104,7 +103,7 @@ def initialise_db():
     )
     nust.execute(
         '''INSERT INTO STUDENT (FIRST_NAME,LAST_NAME,REG_NUMBER,YEAR_OF_GRADUATION, PROGRAMME, DEGREE_CLASS)
-    VALUES ( 'Njabulo', 'Ndlovhu', 'NUST01', 2020, 'Bsc Honours Degree in Information Security','2.1');'''
+    VALUES ( 'Njabulo', 'Ndlovhu', 'NUST01', 2007, 'Bsc Honours Degree in Information Security','2.1');'''
 
     )
     nust.execute(

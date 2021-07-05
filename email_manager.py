@@ -29,7 +29,7 @@ def send_email(recipient: str, password: str, template):
     _app.config[
         'MAIL_USE_SSL'] = True  # The Secure Sockets Layer (SSL) provides encryption for TCP/IP connections as they
     # transit the Internet and local networks between a client and a server.
-    _app.config['MAIL_USERNAME'] = current_user.student_email
+    _app.config['MAIL_USERNAME'] = current_user.email
     _app.config['MAIL_PASSWORD'] = password
     mail = Mail(_app)
     msg = Message('Application for Consent', sender=_app.config['MAIL_USERNAME'], recipients=[recipient], html=template)
