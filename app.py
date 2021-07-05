@@ -1,15 +1,15 @@
 import datetime
 import os
 
-from flask import Blueprint, render_template, request, flash, url_for, Flask
+from flask import Blueprint, render_template, request, flash, url_for, Flask, Response, jsonify
 from flask import send_file
 from flask_login import login_required, current_user
 from sqlalchemy import desc
 
 import setup_app
-from dev_test.databases import save
+from dev_test.databases import save, get_institution_details
 from email_manager import send_email
-from forms import ApplicationConsentForm
+from forms import ApplicationConsentForm, RequestVerificationForm, StudentVerificationForm
 # from init_db import query_student
 from models import RequestStatus, Message
 from token_generator import generate_confirmation_token, confirm_token
@@ -50,6 +50,17 @@ def requests():
     return render_template('requests.html', data=request_data)
 
 
+@app.route('/student-verification')
+def student_verification():
+    # instantiate student verification form
+    form = StudentVerificationForm()
+    if request.method == "POST":
+        form = StudentVerificationForm(request.form)
+        return render_template('verification-page.html')
+    else:
+        return render_template('verification-page.html', form=form)
+
+
 @app.route('/messages')
 @login_required
 def messages():
@@ -63,6 +74,40 @@ def messages():
     return render_template('messages.html', data=data)
 
 
+@app.route('/selectUniversity', methods=["POST", "GET"])
+@login_required
+def select_university():
+    # Set the pagination configuration
+    form = RequestVerificationForm()
+    if request.method == "GET":
+        print(form.institution.data)
+    return render_template('request_verification.html', form=form)
+
+
+@app.route('/year-of-oldest-record/<institution>', methods=['GET'])
+def get(institution):
+    """
+    @desc: Get year of the oldest record by institution
+    @param: institution
+    @return: JSON response year of the oldest record in @institution
+
+
+    """
+    year_of_oldest_record: int = 0
+    if request.method == 'GET':
+        form = RequestVerificationForm(request.form)
+        try:
+            year_of_oldest_record, number_of_students = get_institution_details(institution=institution)
+        except Exception as e:
+            app.logger.error(msg=e)
+            raise Exception(e)
+
+        json_data = [{"institution": universities[institution]},
+                     {"year_of_oldest_record": year_of_oldest_record}
+            , {"number_of_students": number_of_students}]
+        return jsonify(json_data)
+
+
 @app.route('/home', methods=['GET', 'POST'])
 @login_required
 def home():
@@ -72,7 +117,6 @@ def home():
     req.user_id = current_user.id
 
     if request.method == 'POST' and form.validate():
-        print("post")
         institute = universities[form.institution.data]
         # Generate token for confirmation url using recipient's email
         token = generate_confirmation_token(form.student_email.data)
@@ -135,7 +179,6 @@ def download(filename):
 
 
 @app.route('/confirm/<token>')
-@login_required
 def handle_consent_approved(token: str):
     try:
         email = confirm_token(token)
@@ -164,7 +207,6 @@ def handle_consent_approved(token: str):
 
 
 @app.route('/decline/<token>')
-@login_required
 def handle_consent_rejected(token: str):
     # query consent request by token
     req = RequestStatus.query.filter_by(token_id=token).first()
