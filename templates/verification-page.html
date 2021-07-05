@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="card flex-column p-5 m-4">
+
+        <div class=" title d-flex justify-content-center font-weight-bold">
+            Step 2: Student Verification at Selected University
+        </div>
+        <div class="d-flex justify-content-center form-select-lg">
+            <form>
+
+
+                <div class=" input-group mb-3">
+                    {{ form.reg_number(class_="form-control",placeholder="Enter Student's University ID") }}
+                    <button class="btn btn-primary" type="button" id="button-addon2">Verify Student Exist</button>
+                </div>
+                <div id="verification-request">
+                    {{ form.form.request_type.label }}
+                    {{ form.form.request_type }}
+
+                    {{ form.form.payee.label }}
+                    {{ form.form.payee }}
+
+                    <button id="btn-pay"  hidden class="btn btn-primary">Pay</button>
+                    <button id="btn-get-consent" class="btn btn-primary">Get Consent</button>
+
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+
+    <script type="text/javascript">
+        $("#btn")
+        {#   Handle verification type selected     #}
+        $("#verification-request ul  #request_type-0").on('click',
+            () => {
+            {#  Display pa#}
+            }
+        )
+
+    </script>
+{% endblock %}

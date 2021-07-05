@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+<head>
+    <meta charset="utf-8">
+    <title>autocomplete demo</title>
+    {#    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">#}
+    {#    <script src="//code.jquery.com/jquery-1.12.4.js"></script>#}
+    {#    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>#}
+
+    {% block title %}Select University{% endblock %}
+
+    {% block content %}
+        <div class="card flex-column p-5 m-4">
+            <div class=" title d-flex justify-content-center font-weight-bold">
+                Step 1: Select University
+            </div>
+            <div class="d-flex justify-content-center form-select-lg">{{ form.institution(class_="form-control w-50",list="datalistOptions",placeholder="Type to search university...") }}</div>
+            <datalist id="datalistOptions">
+                {% for value in form.choices %}
+                    <option id="insti-option" value={{ value[0]|upper }}>{{ value[1] }}</option>
+                {% endfor %}
+
+            </datalist>
+            <!------------------------------Institution Details ------------------------------------------------------>
+
+            <div class="d-flex justify-content-center flex-column p-5">
+
+                <table class="table table-responsive-md">
+                    <thead></thead>
+                    <tr class="bg-light">
+                        <th id="institution-name" class="text-lg-center font-weight-bold" colspan="2">
+                            Name of University
+                        </th>
+                    </tr>
+                    <tbody class="w-25">
+                    <tr>
+                        <td class="text-left bg">Total number of verifiable records</td>
+                        <td class="font-weight-bold " id="institution-student-count"></td>
+
+                    </tr>
+                    <tr>
+                        <td>Oldest verifiable record</td>
+                        <td class="font-weight-bold " id="institution-oldest-record"></td>
+
+                    </tr>
+
+                    </tbody>
+
+                </table>
+
+                <div class="d-flex justify-content-end">
+                    <button type="button" class="btn btn-primary">Verify Student</button>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <script>
+            $("#institution").on('change', () => {
+                const institution = $("#institution").val().toLowerCase()
+                fetch(`year-of-oldest-record/${institution}`).then(res => {
+                    return res.json()
+                }).then(
+                    res => {
+                        console.log(res)
+                        $("#institution-name").text(res[0]['institution'])
+                        $("#institution-oldest-record").text(res[1]['year_of_oldest_record'])
+                        $("#institution-student-count").text(res[2]['number_of_students'])
+
+                    }
+                )
+            })
+
+        </script>
+    {% endblock %}
