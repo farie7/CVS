@@ -16,6 +16,7 @@
             <th class="font-weight-normal">Date Created</th>
             <th class="font-weight-normal">Time Created</th>
 
+
             <th class="font-weight-normal">Status</th>
         </tr>
         </thead>
@@ -61,7 +62,6 @@
         {% endfor %} <a href="{{ url_for('requests', page=data.next_num) }}"
                         class="btn btn-outline-dark
        {% if data.page == data.pages %}disabled{% endif %}">
-        &raquo;
     </a>
     </div>
     <p class="text-right mt-3">
@@ -135,5 +135,5 @@
     {#        </p>#}
     {#    </div>#}
     {#>>>>>>> d63d48656716b47d598db2be1044e24f73a0d2ed#}
-    >>>>>>> 8c31ef29e3b8badc22d2723850b0776c9ecb755e
+
 {% endblock %}

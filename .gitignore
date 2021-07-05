@@ -6,4 +6,5 @@
 ../dev_test/Ubuntu/
 .idea/
 .xml
+
 *.pyc
