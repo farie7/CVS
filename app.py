@@ -1,7 +1,9 @@
 import datetime
+import logging
 import os
+from logging.config import dictConfig
 
-from flask import Blueprint, render_template, request, flash, url_for, Flask, Response, jsonify
+from flask import Blueprint, render_template, request, flash, url_for, Flask, Response, jsonify, redirect, g
 from flask import send_file
 from flask_login import login_required, current_user
 from sqlalchemy import desc
@@ -9,10 +11,16 @@ from sqlalchemy import desc
 import setup_app
 from dev_test.databases import save, get_institution_details
 from email_manager import send_email
-from forms import ApplicationConsentForm, RequestVerificationForm, StudentVerificationForm
+from forms import ApplicationConsentForm, RequestVerificationForm, StudentVerificationForm, UniversitySelectionForm, \
+    PaymentVerificationRequestForm
 # from init_db import query_student
-from models import RequestStatus, Message
+from models import RequestStatus, Message, Student
+from verification import verify_student
 from token_generator import generate_confirmation_token, confirm_token
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    format=' %(asctime)s %(levelname)s %(name)s %(threadName)s: %(message)s')
 
 universities = {
     'hit': 'Harare Institute of Technology',
@@ -53,11 +61,12 @@ def requests():
 @app.route('/student-verification')
 def student_verification():
     # instantiate student verification form
-    form = StudentVerificationForm()
+
     if request.method == "POST":
-        form = StudentVerificationForm(request.form)
-        return render_template('verification-page.html')
+        payment_form = StudentVerificationForm(request.form)
+        # return render_template('verification-page.html',form=form)
     else:
+        form = StudentVerificationForm()
         return render_template('verification-page.html', form=form)
 
 
@@ -74,20 +83,26 @@ def messages():
     return render_template('messages.html', data=data)
 
 
-@app.route('/selectUniversity', methods=["POST", "GET"])
+@app.route('/select-university', methods=["POST", "GET"])
 @login_required
 def select_university():
-    # Set the pagination configuration
-    form = RequestVerificationForm()
-    if request.method == "GET":
-        print(form.institution.data)
+    if request.method == "POST":
+        form = UniversitySelectionForm(request.form)
+        assert form.institution.data.lower() in universities.keys(), "Unavailable"
+        g.institution = universities[form.institution.data.lower()]
+        g.university = form.institution.data
+        app.logger.debug("Value of g.university is {}".format(g.institution))
+        return render_template('verification-page.html', form=StudentVerificationForm())
+    else:
+        form = UniversitySelectionForm()
+
     return render_template('request_verification.html', form=form)
 
 
 @app.route('/year-of-oldest-record/<institution>', methods=['GET'])
-def get(institution):
+def get_institution(institution: str):
     """
-    @desc: Get year of the oldest record by institution
+    @desc: Get institution data institution
     @param: institution
     @return: JSON response year of the oldest record in @institution
 
@@ -97,25 +112,59 @@ def get(institution):
     if request.method == 'GET':
         form = RequestVerificationForm(request.form)
         try:
-            year_of_oldest_record, number_of_students = get_institution_details(institution=institution)
+            year_of_oldest_record, number_of_students = get_institution_details(institution)
+            app.logger.debug(
+                " year_of_oldest_record, number_of_students : {}, {}".format(year_of_oldest_record, number_of_students))
+            json_data = [{"institution": universities[institution]},
+                         {"year_of_oldest_record": year_of_oldest_record}
+                , {"number_of_students": number_of_students}]
+            return jsonify(json_data)
         except Exception as e:
-            app.logger.error(msg=e)
-            raise Exception(e)
-
-        json_data = [{"institution": universities[institution]},
-                     {"year_of_oldest_record": year_of_oldest_record}
-            , {"number_of_students": number_of_students}]
-        return jsonify(json_data)
+            app.logger.error("Error :\n {}".format(e))
+            return jsonify({"message": "Student is not found."})
 
 
 @app.route('/home', methods=['GET', 'POST'])
 @login_required
 def home():
     form = ApplicationConsentForm(request.form)
+    return render_template('home.html', form=form)
+
+
+@app.route('/verify-student-exists', methods=['GET'])
+def handle_verify_student_exists():
+    if request.method == 'GET':
+        reg_number = request.args.get('reg_number')
+        institution = request.args.get('institution')
+
+        app.logger.debug("{}: {}".format(reg_number, institution))
+
+        try:
+
+            student = verify_student(reg_number, institution)
+            # use if else
+            if isinstance(student, Student):
+                message = "We can confirm the student with ID {} has been found in the {}" \
+                    .format(reg_number, universities[institution])
+            else:
+                message = "Student  {} not found at {}" \
+                    .format(reg_number, universities[institution])
+            return jsonify(message)
+        except Exception as e:
+            app.logger.error(e)
+
+
+# @login_required
+# @app.route('/')
+
+@app.route('/send_email', methods=['POST'])
+@login_required
+def handle_send_email():
+    form = ApplicationConsentForm(request.form)
     global institute
     req = RequestStatus()
     req.user_id = current_user.id
-
+    app.logger.debug(request.method)
     if request.method == 'POST' and form.validate():
         institute = universities[form.institution.data]
         # Generate token for confirmation url using recipient's email
@@ -130,17 +179,21 @@ def home():
         html = render_template('student_consent_request.html', confirm_url=confirm_url, reject_url=reject_url,
                                message=message)
 
-        sent = send_email(recipient=form.student_email.data, password=form.password.data, template=html)
-        print(sent)
-        if sent:
+        try:
+            send_email(recipient=form.student_email.data, password=form.password.data, template=html)
             req.token_id = token
             req.status = "PENDING"
             if hasattr(req, 'student'):
                 setattr(req, 'student', form.student_email.data)
             save(req)
             flash('Your have successfully sent your request.', 'success')
-        else:
+            app.logger.info("Message successfully sent")
+
+        except Exception as e:
+            app.logger.error(e)
             flash('Your email has not been sent. Please try again.', 'danger')
+    else:
+        app.logger.warn("form not valid or request method == %s ") % request.method
 
     #     # search student in database
     #     reg_number = form.reg_number.data
@@ -167,8 +220,7 @@ def home():
     #     app.db.session.commit()
     #
     #     return render_template('home.html', form=form, verified=verified, file=file)
-
-    return render_template('home.html', name=current_user.name, form=form, verified=None)
+    return redirect('home')
 
 
 @app.route('/download/<path:filename>')
@@ -182,9 +234,10 @@ def download(filename):
 def handle_consent_approved(token: str):
     try:
         email = confirm_token(token)
+        app.logger.debug('Token: {} , email: {}'.format(token, email))
 
-    except:
-        print('The confirmation link is invalid or has expired.')
+    except Exception as e:
+        app.logger.error('Exception in handle consent {}'.format(e))
 
     req = RequestStatus.query.filter_by(token_id=token).first()
 
@@ -202,8 +255,8 @@ def handle_consent_approved(token: str):
         save(req)
         save(obj)
 
-        return render_template('consent_approved.html', institute=institute)
-    return render_template('error_page.html', institute=institute)
+        return render_template('consent_approved.html')
+    return render_template('error_page.html')
 
 
 @app.route('/decline/<token>')

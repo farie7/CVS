@@ -10,20 +10,13 @@ class ApplicationConsentForm(Form):
                               choices=[('hit', 'Harare Institute of Technology'), ('uz', 'University of Zimbabwe'),
                                        ('nust', 'National University of Science and Technology')]
                               , validators=[validators.InputRequired()])
-    reg_number = StringField(label="Enter Student University ID", validators=[validators.InputRequired()])
+    # reg_number = StringField(label="Enter Student University ID", validators=[validators.InputRequired()])
     student_email = EmailField(label="Enter student's email address (Required)",
                                validators=[validators.InputRequired(), validators.Email()])
     user_email = EmailField(label="Email Address", validators=[validators.InputRequired(), validators.Email()])
     password = PasswordField(u'Password ', [
         validators.DataRequired(),
     ])
-
-
-class PaymentVerificationRequestForm(Form):
-    choices = [("certificate", "Certificate"), ("transcript", "Transcript")]
-    choices_payee = [("student", "Student"), ("organisation", "Organisation")]
-    request_type = RadioField(label="Verification Request", choices=choices)
-    payee = RadioField(label="Payment ", choices=choices_payee)
 
 
 class RequestVerificationForm(Form):
@@ -33,11 +26,22 @@ class RequestVerificationForm(Form):
     institution = StringField("Select Institution", validators=[DataRequired()], id='institution', _name="institution")
 
 
+class PaymentVerificationRequestForm(Form):
+    choices = [("certificate", "Certificate"), ("transcript", "Transcript")]
+    choices_payee = [("student", "Student"), ("organisation", "Organisation")]
+    request_type = RadioField(label="Verification Request", choices=choices)
+    payee = RadioField(label="Payment ", choices=choices_payee)
+
+
 class StudentVerificationForm(Form):
     reg_number = StringField(label="Enter Student University ID", validators=[validators.InputRequired()])
-    student_email = EmailField(label="Enter student's email address (Required)",
-                               validators=[validators.InputRequired(), validators.Email()])
-    form = PaymentVerificationRequestForm()
+    institution = StringField("Select Institution", id='institution', _name="institution",
+                              validators=[validators.InputRequired()])
+    payment_verification_request_form=PaymentVerificationRequestForm()
+    #
+    # student_email = EmailField(label="Enter student's email address (Required)",
+    #                            validators=[validators.InputRequired(), validators.Email()])
+
     # user_email = EmailField(label="Email Address", validators=[validators.InputRequired(), validators.Email()])
     #
     # password = PasswordField(u'Password ', [
@@ -45,7 +49,7 @@ class StudentVerificationForm(Form):
     # ])
 
 
-class VerificationForm(Form):
+class UniversitySelectionForm(Form):
     choices = [('hit', 'Harare Institute of Technology'),
                ('uz', 'University of Zimbabwe'), ('nust', 'National University of Science and Technology')]
 

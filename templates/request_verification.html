@@ -7,10 +7,11 @@
     {#    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>#}
 
     {% block title %}Select University{% endblock %}
-
+</head>
     {% block content %}
         <div class="card flex-column p-5 m-4">
-            <div class=" title d-flex justify-content-center font-weight-bold">
+        <form action="{{ url_for('select_university') }}" method="post">
+               <div class=" title d-flex justify-content-center font-weight-bold">
                 Step 1: Select University
             </div>
             <div class="d-flex justify-content-center form-select-lg">{{ form.institution(class_="form-control w-50",list="datalistOptions",placeholder="Type to search university...") }}</div>
@@ -48,12 +49,16 @@
                 </table>
 
                 <div class="d-flex justify-content-end">
-                    <button type="button" class="btn btn-primary">Verify Student</button>
+                    <button type="submit" class="btn btn-primary">Verify Student</button>
 
                 </div>
 
             </div>
+        </form>
         </div>
+
+
+
 
 
         <script>

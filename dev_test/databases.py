@@ -1,10 +1,13 @@
 import os
 import sqlite3
 import logging
+
 from flask import flash
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+
+import setup_app
 from setup_app import db
 from models import Student, Base
 
@@ -148,35 +151,46 @@ def seed_databases():
 # flask_g global variable
 # mem cache server
 
-def database_exists(institution_database: str) -> bool:
+# def database_exists(institution_database: str) -> bool:
+#     """
+#     Assert that the database exists
+#     """
+#
+#     return os.path.exists('%s' % institution_database)
+
+
+def database_exists(func):
     """
     Assert that the database exists
     """
 
-    return os.path.exists('./%s' % institution_database)
+    def inner(arg):
+        institution_database = 'dev_test/%s.db' % arg
+        assert os.path.exists(institution_database), setup_app.create_app().logger.error(
+            " Database error : {} does not exist.".format(institution_database))
+        return func(arg)
+
+    return inner
 
 
+@database_exists
 def get_institution_details(institution: str):
     """
     @desc: Returns the number of students in selected institution and year of the oldest record
     @param: institution:the institution to search
     """
-    try:
-        institution_database = '%s.db' % institution
+    institution_database = 'dev_test/%s.db' % institution
 
-        assert database_exists(institution_database), "%s does not exist" % institution_database
-        conn = sqlite3.connect(institution_database)
-        statement = '''SELECT MIN(YEAR_OF_GRADUATION), COUNT(YEAR_OF_GRADUATION) FROM STUDENT;'''
-        cursor = conn.cursor()
-        result = cursor.execute(statement)
-        oldest_record = 0
-        number_of_students = 0
-        for row in result:
-            oldest_record += row[0]
-            number_of_students += row[1]
-        return oldest_record, number_of_students
-    except Exception as e:
-        logging.error(e)
+    conn = sqlite3.connect(institution_database)
+    statement = '''SELECT MIN(YEAR_OF_GRADUATION), COUNT(YEAR_OF_GRADUATION) FROM STUDENT;'''
+    cursor = conn.cursor()
+    result = cursor.execute(statement)
+    oldest_record = 0
+    number_of_students = 0
+    for row in result:
+        oldest_record += row[0]
+        number_of_students += row[1]
+    return oldest_record, number_of_students
 
 
 # TOD

@@ -96,7 +96,6 @@ class RequestStatus(db.Model):
 class Message(db.Model):
     id = db.Column(Integer, primary_key=True)
     user_id = db.Column(String, nullable=True)
-
     message = db.Column(String, nullable=True)
     date_created = db.Column(Date(), default=datetime.now())
     time_created = db.Column(String, nullable=True)
