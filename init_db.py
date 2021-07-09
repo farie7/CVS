@@ -14,12 +14,15 @@ parser.add_argument("-r", "--reg_number", help='Enter student reg number. ')
 
 args = parser.parse_args()
 
-
+class DatabaseException(Exception):
+    __cause__ = "File not Found"
 def initialise_db():
-    uz = sqlite3.connect('uz.db')  # You can create a new database by changing the name within the quotes
-    nust = sqlite3.connect('nust.db')
-    hit = sqlite3.connect('hit.db')
-
+    try:
+        uz = sqlite3.connect('dev_test/uz.db')  # You can create a new database by changing the name within the quotes
+        nust = sqlite3.connect('dev_test/nust.db')
+        hit = sqlite3.connect('dev_test/hit.db')
+    except DatabaseException:
+        raise DatabaseException("File not found")
     statement_1 = '''
                  CREATE TABLE REQUESTS(
             ID INT PRIMARY KEY     , 
@@ -203,8 +206,9 @@ def initialise_db():
 
 def delete_databases():
     for d in ['hit.db', 'nust.db', 'uz.db']:
-        if os.path.exists(d):
-            os.remove(d)
+        database = "dev_test/%s" % d
+        if os.path.exists("%s" % database):
+            os.remove(database)
             print("Databases deleted.")
         else:
             print("The database %s do not exist. " % (d))
