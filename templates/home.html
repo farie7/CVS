@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+<head>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        $(function () {
+
+            $("#id_institution").autocomplete({
+                source: {{ url_for('home') }},
+
+                min_length: 2
+            });
+
+        });
+    </script>
+    <title></title>
+</head>
+{% block content %}
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=True) %}
+         {% if messages %}
+               {% for category, message in messages %}
+                   <div class="flashes"><p class="{{ category }}">{{ message }}</p></div>
+               {% endfor %}
+         {% endif %}
+      {% endwith %}
+
+
+    <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <h4 class="modal-title w-100 font-weight-bold">Please fill in the details</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{{ url_for('handle_verify_student_exists') }}" method="post" class="modal-body mx-3 ">
+                   <p>{{ form.institution.label }}</p>
+                                   <p>{{ form.institution(class_='form-control') }}</p>
+    {#                                    {{ form.student_email.label }}#}
+      {#                                  {{ form.student_email(class_='form-control') }}#}
+    {#               <p>{{ form.user_email.label }}</p>#}
+     {#              <p>{{ form.user_email(class_='form-control') }}</p>#}
+
+                    <p>{{ form.reg_number.label(class_="font-semibold") }}</p>
+                   <p> {{ form.reg_number(class_='form-control') }}</p>
+
+       {#             <p>{{ form.password.label(class_="font-semibold") }}</p>#}
+        {#          <p> {{ form.password(class_='form-control') }}</p>#}
+
+                    <div class="form-check">
+                          <input class="form-check-input" type="checkbox" name="group1" value="1" id="flexCheckDefault">
+                          <label class="form-check-label" for="flexCheckDefault">
+                            Transcript
+                          </label>
+                            <br>
+                          <input class="form-check-input" type="checkbox" name="group1" value="2" id="flexCheckChecked" >
+                          <label class="form-check-label" for="flexCheckChecked">
+                            Certificate
+                          </label>
+                        </div>
+                    <div class="modal-footer d-flex justify-content-center">
+                        <button type="submit" id="btn-one" class="btn btn-default">VERIFY</button>
+                    </div>
+                </form>
+
+
+
+            </div>
+        </div>
+    </div>
+
+        <p> {{message}} </p>
+
+    <div class="container text-center my-5  ">
+    <h3 class="font-weight-normal text-black-50">Welcome to the Universities and Colleges of Zimbabwe Online CertificateVerification System (ZOCVS)
+    </h3>
+    <p class="font-weight-normal">To verify a students certificate, click the button below:</p>
+    <div class="text-center">
+        <a href="" class="btn btn-default rounded-0 mb-4 font-weight-bold" data-toggle="modal"
+           data-target="#modalLoginForm">
+            Create new request
+        </a>
+    </div>
+    {% if verified %}
+        <div class="alert alert-success" role="alert">
+            We can confirm that the student's certificate is valid. <a
+                href="{{ url_for('download',filename=file) }}" class="alert-link">Click
+            here
+        </a>to download the certificate of acknowledgement.
+        </div>
+    {% elif verified == False %}
+        <div class="alert alert-danger" role="alert">
+        The student has not been found.
+    {% endif %}
+
+
+
+
+</div>
+
+
+    <script>
+        $('#btn-one').click(function () {
+            $('#btn-one').html('<span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>Verifying Student...')
+                .addClass('disabled');
+        });
+    </script>
+    <script src="{{url_for('static', filename='js/checkbox.js' )}}"></script>
+{% endblock %}
+</div>
+</div>

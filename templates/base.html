@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=2">
+    <title>Zimbabwe Certificate Verification System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+            integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+            integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+    <!-- JQuery -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js">
+    </script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.js">
+    </script>
+
+    <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css"
+          rel="stylesheet" type="text/css"/>
+</head>
+
+
+<body>
+<section class="is-fullheight">
+
+    <div class="hero-head">
+        <!--Navbar -->
+        <nav class="mb-1 navbar navbar-expand-lg navbar-dark default-color">
+            <a class="navbar-brand" href="{{ url_for('home') }}">Zimbabwe Certificate Verification System</a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-4"
+                    aria-controls="navbarSupportedContent-4" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent-4">
+                {% if current_user.is_authenticated %}
+                    <ul class="navbar-nav ml-auto">
+                        <a class="nav-link text-white " href="{{ url_for('to_payment') }}">
+                            Payments
+                        </a>
+
+                        <a class="nav-link font-weight-bold text-white " href="{{ url_for('requests') }}">My
+                            Requests
+                            {% set request_change = current_user.request_change() %}
+                            <span id="notification_count" class="badge"
+                                  style="visibility: {% if request_change %}visible
+                                                     {% else %}hidden {% endif%};">
+                                {{ request_change }}
+                            </span>
+                        </a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-4" data-toggle="dropdown"
+                               aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-user"></i> Welcome {{ current_user.name }} </a>
+
+
+                            <div class="dropdown-menu dropdown-menu-right dropdown-info"
+                                 aria-labelledby="navbarDropdownMenuLink-4">
+                                <a class="dropdown-item" href="{{ url_for('profile') }}">My account</a>
+                                <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Log out</a>
+                            </div>
+                        </li>
+                        {#                          <a class="dropdown-item" href="{{ url_for('profile') }}">My account</a>#}
+                        {#                                <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Log out</a>#}
+
+                        <div class="dropdown-menu dropdown-menu-right dropdown-info"
+                             aria-labelledby="navbarDropdownMenuLink-4">
+                            <a class="dropdown-item" href="{{ url_for('profile') }}">My account</a>
+                            <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Log out</a>
+                        </div>
+                        </li>
+                        {#                          <a class="dropdown-item" href="{{ url_for('profile') }}">My account</a>#}
+                        {#                                <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Log out</a>#}
+
+                    </ul>
+                {% endif %}
+                {% if not current_user.is_authenticated %}
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link text-white " href="{{ url_for('how_does_it_work') }}">
+                            How does it work
+                                </a>
+                            </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('auth.login') }}" class="nav-link">
+                                Login
+                            </a>
+                        </li>
+                        <li class="nav-item"><a href="{{ url_for('auth.signup') }}" class="nav-link">
+                            Sign Up
+                        </a></li>
+                    </ul>
+                {% endif %}
+            </div>
+        </nav>
+        <!--/.Navbar -->
+    </div>
+
+
+    <div class="d-flex justify-content-center align-items-center " style="height: 750px;">
+        <div class="d-flex flex-column w-75">
+            {% block content %}
+            {% endblock %}
+        </div>
+
+    </div>
+
+</section>
+
+
+<div class="dropdown-menu dropdown-menu-right dropdown-info"
+     aria-labelledby="navbarDropdownMenuLink-4">
+    <a class="dropdown-item" href="{{ url_for('profile') }}">My account</a>
+    <a class="dropdown-item" href="{{ url_for('auth.logout') }}">Log out</a>
+</div>
+</li>
+
+
+</ul>
+
+
+</div>
+</nav>
+<!--/.Navbar -->
+</div>
+
+
+</section>
+</body>
+
+<footer class="page-footer mb-0 bottom">
+    <div class=" alert-info text-center" role="alert">
+        <dt class="h3">Disclaimer!</dt>
+        <dd>The documents generated by Zimbabwe Certification Verification System are <b>NOT</b> intended to replace the
+            actual certificates for each student.
+        </dd>
+
+    </div>
+</footer>
+
+</html>

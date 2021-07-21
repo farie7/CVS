@@ -1,0 +1,5 @@
+{% extends 'base.html' %}
+
+{% block content %}<h1>Please click the button below to accept or reject the request:</h1>
+<a href="{{ confirm_url }}"><button type="button" class="btn btn-success">Approve</button></a> <a href="{{ reject_url }}"> <button type="button" class="btn btn-danger">Decline</button></a>
+{% endblock %}

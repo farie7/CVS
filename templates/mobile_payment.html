@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <title>payment </title>
+    {% block title %}Select Payment{% endblock %}
+</head>
+    {% block content %}
+        <div class="card flex-column p-5 m-4">
+        <form action="" method="post">
+               <div class=" title d-flex justify-content-center font-weight-bold">
+                Payments
+            </div>
+            <div class="d-flex justify-content-center form-select-lg">{{ form.payment(class_="form-control w-50",list="datalistOptions",placeholder="Payment Options") }}</div>
+            <datalist id="datalistOptions">
+                {% for value in form.choices %}
+                    <option id="payment-option" value={{ value[0]|upper }}>{{ value[1] }}</option>
+                {% endfor %}
+
+            </datalist>
+            <!------------------------------Institution Details ------------------------------------------------------>
+
+            <div class="d-flex justify-content-center flex-column p-5">
+
+                <table class="table table-responsive-md">
+                    <thead></thead>
+                    <tr class="bg-light">
+                        <th id="payment-name" class="text-md-center font-weight-bold" colspan="2">
+                            Selected Payment
+                        </th>
+                    </tr>
+                    <tbody class="w-25">
+
+                </table>
+
+                <div   class="d-flex justify-content-center form-select-lg" name="hidden-panel1" >
+                    <input id="hidden-panel1" class="form-control w-50"  placeholder="Enter Phone Number" type="text" >
+                </div>
+                    </div>
+
+                <div class="d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary">Payment</button>
+
+                </div>
+
+
+
+
+        </form>
+        </div>
+
+        <script src="{{url_for('static', filename='js/style.js' )}}"></script>
+       <script src="{{url_for('static', filename='js/style4.js' )}}"></script>
+        <script src="{{url_for('static', filename='js/style2.js' )}}"></script>
+
+    {% endblock %}
